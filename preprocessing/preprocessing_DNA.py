@@ -11,7 +11,7 @@ import os
 # 디버깅모드시 실행파일은 주석처리, 중간생성물 지우기 여부는 False처리, max_looping=1 처리!!
 
 THREADS = 16                                        
-REF_GENOME_PATH = '/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta' 
+# REF_GENOME_PATH = '/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta' 
 
  # 중간 생성물 지우기 여부
 rm_sam = True
@@ -20,8 +20,8 @@ rm_sorted_bam = True
 rm_dedup_sorted_bam = True
 
 
-seq_type = "WES" # wes = interval file 요구됨 (알려진 exon 자리) / mkrecal, recal
-INTERVAL_FILE_PATH = '/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.bed'
+# seq_type = "WES" # wes = interval file 요구됨 (알려진 exon 자리) / mkrecal, recal
+# INTERVAL_FILE_PATH = '/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.bed'
 
 max_looping = 50
 
@@ -32,6 +32,9 @@ read2 = ''
 read_name = ''
 prefix = ''
 INPUT_DIR = ''
+REF_GENOME_PATH = ''
+INTERVAL_FILE_PATH = ''
+seq_type = ''
 
 def rm_file(is_rm, file):
     if is_rm is True:
@@ -45,9 +48,13 @@ def main(argv):
     global read_name
     global prefix
     global INPUT_DIR
+    global REF_GENOME_PATH
+    global INTERVAL_FILE_PATH
+    global seq_type
 
     try:
-        opts, etc_args = getopt.getopt(argv[1:], "ha:b:n:p:i:", ["help", "readA=", "readB=", "readName=", "prefix=", "inputDir="])
+        opts, etc_args = getopt.getopt(argv[1:], "ha:b:n:p:i:R:L:y:", ["help", "readA=", "readB=", "readName=", "prefix=", "inputDir=",\
+            "ref=", "interval=", "type="])
 
     except getopt.GetoptError:  # 옵션지정이 올바르지 않은 경우
         print(file_name, 'option error')
@@ -69,6 +76,12 @@ def main(argv):
             prefix = arg
         elif opt in ("-i", "--inputDir"):
             INPUT_DIR = arg
+        elif opt in ("-R", "--ref"):
+            REF_GENOME_PATH = arg
+        elif opt in ("-L", "--interval"):
+            INTERVAL_FILE_PATH = arg
+        elif opt in ("-y", "--type"):
+            seq_type = arg
 
 main(sys.argv)
 

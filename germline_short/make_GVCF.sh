@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-if [ $# -lt 7 ]
+if [ $# -lt 5 ]
 then
-    echo usage: $0 [RefGenome] [output.g.vcf.gz] [input.bam] [interval] [table_path]  [RAM] [seqType]
+    echo usage: $0 [RefGenome] [output.g.vcf.gz] [input.bam] [interval] [seqType_WGS/WES]
     exit 1
 fi
 
@@ -20,11 +20,11 @@ fi
 # contamination data
 # max_alternate_alleles, variant_index_parameter, variant_index_type ===> x
 
-
+# "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx30G"
 source activate gatk4
-gatk --java-options $ram HaplotypeCaller \
+gatk --java-options "-Xmx100G" HaplotypeCaller \
     -R $ref_genome \
-    -O $outputBam \
+    -O $output \
     -I $inputBam \
     -L $interval \
     -ERC GVCF \
