@@ -46,8 +46,8 @@ def main(argv):
 
 
     try:
-        opts, etc_args = getopt.getopt(argv[1:], "hg:n:p:i:R:L:y:", ["help", "GVCF=", "readName=", "prefix=", "inputDir=, \
-            -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}"])
+        opts, etc_args = getopt.getopt(argv[1:], "hg:n:p:i:R:L:y:", ["help", "GVCF=", "readName=", "prefix=", "inputDir=", \
+            "ref=", "interval=", "type="])
 
     except getopt.GetoptError:  # 옵션지정이 올바르지 않은 경우
         print(file_name, 'option error')
@@ -76,7 +76,6 @@ def main(argv):
 main(sys.argv)
 
 error_log_file = INPUT_DIR + "errorLog.txt"
-
 
 
 # merge

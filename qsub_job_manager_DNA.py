@@ -22,7 +22,7 @@ RAW_READS = r'*.fastq.gz'
 
 # Germline short variant discovery (SNPs + Indels)
 PROCESSED_BAM = r'*.bam'
-GVCF = r'*.g.vcf.gz'
+GVCF = r'\*.g.vcf.gz' # python인자로 넘길때 \* 필요
 
 
 # Somatic short variant discovery (SNVs + Indels)
@@ -88,7 +88,7 @@ elif WORKING_TYPE == "gs":
         sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type}')
 
     while True:
-        sleep(600)
+        sleep(300)
         val = sp.check_output(f'qstat', shell=True, universal_newlines=True)
         if val == "":
             print("GVCF 생성 완료")
