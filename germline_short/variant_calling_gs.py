@@ -14,7 +14,9 @@ import os
 consolidating_thread = 8
 max_looping = 50
 
-db_dir_name = r'HN00144124_DB/'
+db_dir_name = r'HN00144124_DB/' # 이 형식 지켜줄것
+
+db_snp_for_joint_call = r'/home/jun9485/data/refGenome/b37/dbsnp_138.b37.vcf'
 
 ##############################################################################################
 
@@ -107,3 +109,22 @@ while True:
         if loop_count > max_looping:
             exit(0)
 
+
+
+data_group_name = db_dir_name.split('_')[0]
+output_prefix = GVCF_DIR + data_group_name
+output_path = output_prefix + 'vcf.gz'
+
+# joint call
+while True:
+    try:
+        mapping_time = time.time()
+        err_msg = f'An_error_occurred_in_joint_call.sh:_JointCalling_was_failed.'
+        sp.check_call(fr'sh joint_call.sh {REF_GENOME_PATH} {output_path} {db_snp_for_joint_call} {db_dir} {tmp_dir} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+        break
+
+    except sp.CalledProcessError as e:
+        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        loop_count += 1
+        if loop_count > max_looping:
+            exit(0)

@@ -8,7 +8,7 @@ fi
 
 
 
-if [ "$6" = "WGS" ]; then
+if [ "$7" = "WGS" ]; then
     interval= 
 fi
 
