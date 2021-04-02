@@ -7,21 +7,18 @@ import getopt
 import os
 
 
+
 ####################### hyper parameters ####################################################
 # 디버깅모드시 실행파일은 주석처리, 중간생성물 지우기 여부는 False처리, max_looping=1 처리!!
 
-consolidating_thread = 16
+consolidating_thread = 8
 max_looping = 50
 
 db_dir_name = r'HN00144124_DB/'
 
 ##############################################################################################
 
-gvcf_path = ''
-read_list = ''
-gvcf_list = ''
-prefix_list = ''
-INPUT_GS_DIR = ''
+GVCF_DIR = ''
 REF_GENOME_PATH = ''
 INTERVAL_FILE_PATH = ''
 seq_type = ''
@@ -32,19 +29,14 @@ def rm_file(is_rm, file):
 
 def main(argv):
     file_name = argv[0]
-    global gvcf_path
-    global read_list
-    global gvcf_list
-    global prefix_list
-    global INPUT_GS_DIR
+    global GVCF_DIR
     global REF_GENOME_PATH
     global INTERVAL_FILE_PATH
     global seq_type
 
 
     try:
-        opts, etc_args = getopt.getopt(argv[1:], "hg:r:v:p:i:R:L:y:", ["help", "GVCF=", "readList=", "gvcfList", "prefixList=", "inputDir=", \
-            "ref=", "interval=", "type="])
+        opts, etc_args = getopt.getopt(argv[1:], "hg:R:L:y:", ["help", "GVCF=", "ref=", "interval=", "type="])
 
     except getopt.GetoptError:  # 옵션지정이 올바르지 않은 경우
         print(file_name, 'option error')
@@ -56,15 +48,7 @@ def main(argv):
             print(file_name, 'file name..')
             sys.exit(0)
         elif opt in ("-g", "--GVCF"):
-            gvcf_path = arg
-        elif opt in ("-r", "--readList"):
-            read_list = arg
-        elif opt in ("-v", "--gvcfList"):
-            gvcf_list = arg
-        elif opt in ("-p", "--prefixList"):
-            prefix_list = arg
-        elif opt in ("-i", "--inputDir"):
-            INPUT_GS_DIR = arg
+            GVCF_DIR = arg
         elif opt in ("-R", "--ref"):
             REF_GENOME_PATH = arg
         elif opt in ("-L", "--interval"):
@@ -74,7 +58,7 @@ def main(argv):
 
 main(sys.argv)
 
-error_log_file = INPUT_GS_DIR + "errorLog.txt"
+error_log_file = GVCF_DIR + "errorLog.txt"
 
 
 def make_mapfile(_read_list, _gvcf_list, output_file_path):
@@ -89,16 +73,24 @@ def make_mapfile(_read_list, _gvcf_list, output_file_path):
         f.write(data)
     f.close
 
+# GVCF = r'\*.g.vcf.gz' # python인자로 넘길때 \* 필요
+gvcf_path_list = glob.glob(GVCF_DIR + '*.g.vcf.gz') 
+gvcf_path_list = natsort.natsorted(gvcf_path_list)
+read_list = []
 
+for i in range(len(gvcf_path_list)):
+    read_name = gvcf_path_list[i].split('.')[-4].split(r'/')[-1]
+    read_list.append(read_name)
 
 # merge
-map_path = rf'{INPUT_GS_DIR} + mapFile.txt'
-make_mapfile(read_list, gvcf_list, map_path)
+map_path = rf'{GVCF_DIR}' + 'mapFile.txt'
+make_mapfile(read_list, gvcf_path_list, map_path)
+exit(0)
 
-db_dir = INPUT_GS_DIR + db_dir_name
+db_dir = GVCF_DIR + db_dir_name
 batch_size = 50
 
-tmp_dir = INPUT_GS_DIR + 'largeTmp/'
+tmp_dir = GVCF_DIR + 'largeTmp/'
 
 loop_count = 0
 

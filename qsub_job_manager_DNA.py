@@ -23,7 +23,6 @@ RAW_READS = r'*.fastq.gz'
 # Germline short variant discovery (SNPs + Indels)
 PROCESSED_BAM = r'*.bam'
 GSDIR = r'gs/'
-GVCF = r'\*.g.vcf.gz' # python인자로 넘길때 \* 필요
 
 
 # Somatic short variant discovery (SNVs + Indels)
@@ -75,10 +74,12 @@ elif WORKING_TYPE == "gs":
 
     # exit(0) # path list 확인하고 싶으면 이거 풀기
 
-    read_name_list = []
-    prefix_list = []
-    gvcf_list = []
+    # read_name_list = []
+    # prefix_list = []
+    # gvcf_list = []
+
     INPUT_GS_DIR = INPUT_DIR + GSDIR
+
     for i in range(path_len):
         process = round(i/path_len, 2) * 100
         print(f'{process}% 진행')
@@ -86,13 +87,10 @@ elif WORKING_TYPE == "gs":
         bamfile = input_path_list[i]
         # sample: recal_deduped_sorted_hiPS36-C.bam
         read_name = input_path_list[i].split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
-        read_name_list.append(read_name)
         
         prefix = INPUT_GS_DIR + read_name
-        prefix_list.append(prefix)
         
         output_gvcf = INPUT_GS_DIR + read_name + '.g.vcf.gz'
-        gvcf_list.append(output_gvcf)
 
         # HaplotypeCaller 실행
         sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
@@ -104,10 +102,8 @@ elif WORKING_TYPE == "gs":
             print("GVCF 생성 완료")
             break
     
-    gvcf_path = INPUT_GS_DIR + GVCF
 
-    sp.call(f'python germline_short/variant_calling_gs.py -g {gvcf_path} -r {read_name_list} -v {gvcf_list} -p {prefix_list} -i {INPUT_GS_DIR} \
-        -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
+    sp.call(f'python germline_short/variant_calling_gs.py -g {INPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
         
     
 
