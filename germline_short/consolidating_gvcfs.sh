@@ -23,6 +23,6 @@ gatk --java-options "-Xmx80G" GenomicsDBImport \
     -L $3 \
     --sample-name-map $4 \
     --tmp-dir $5 \
-    --reader-threads $6 \
+    --reader-threads $6
 conda deactivate
 

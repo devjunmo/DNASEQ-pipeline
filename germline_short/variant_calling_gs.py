@@ -18,6 +18,8 @@ db_dir_name = r'HN00144124_DB/' # 이 형식 지켜줄것
 
 db_snp_for_joint_call = r'/home/jun9485/data/refGenome/b37/dbsnp_138.b37.vcf'
 
+tmp_dir_name = 'largeTmp'
+
 ##############################################################################################
 
 GVCF_DIR = ''
@@ -87,12 +89,13 @@ for i in range(len(gvcf_path_list)):
 # merge
 map_path = rf'{GVCF_DIR}' + 'mapFile.txt'
 make_mapfile(read_list, gvcf_path_list, map_path)
-exit(0)
-
+print(read_list)
+# exit(0)/
 db_dir = GVCF_DIR + db_dir_name
 batch_size = 50
 
-tmp_dir = GVCF_DIR + 'largeTmp/'
+os.makedirs(f'{GVCF_DIR}{tmp_dir_name}')
+tmp_dir = GVCF_DIR + f'{tmp_dir_name}/'
 
 loop_count = 0
 
@@ -100,7 +103,7 @@ while True:
     try:
         mapping_time = time.time()
         err_msg = f'An_error_occurred_in_consolidating_gvcfs.sh:_Consolidating_GVCF_files_was_failed.'
-        sp.check_call(fr'sh consolidating_gvcfs.sh {db_dir} {batch_size} {INTERVAL_FILE_PATH} {map_path} {tmp_dir} {consolidating_thread} {seq_type}', shell=True)
+        sp.check_call(fr'sh germline_short/consolidating_gvcfs.sh {db_dir} {batch_size} {INTERVAL_FILE_PATH} {map_path} {tmp_dir} {consolidating_thread} {seq_type}', shell=True)
         break
 
     except sp.CalledProcessError as e:
@@ -120,7 +123,7 @@ while True:
     try:
         mapping_time = time.time()
         err_msg = f'An_error_occurred_in_joint_call.sh:_JointCalling_was_failed.'
-        sp.check_call(fr'sh joint_call.sh {REF_GENOME_PATH} {output_path} {db_snp_for_joint_call} {db_dir} {tmp_dir} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+        sp.check_call(fr'sh germline_short/joint_call.sh {REF_GENOME_PATH} {output_path} {db_snp_for_joint_call} {db_dir} {tmp_dir} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
         break
 
     except sp.CalledProcessError as e:
