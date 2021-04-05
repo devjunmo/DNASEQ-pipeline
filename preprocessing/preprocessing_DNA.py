@@ -155,7 +155,7 @@ while True:
 metric_prefix = INPUT_DIR + read_name + '_'
 dedup_suffix = 'deduped_' + sort_suffix
 dedup_sorted_bam = INPUT_DIR + dedup_suffix
-ram_to_use = 100
+ram_to_use = 20
 
 loop_count = 0
 
@@ -197,7 +197,7 @@ while True:
 
 # making recal_table
 table_path = INPUT_DIR + read_name + '_recal.table'
-ram_to_use = 100
+ram_to_use = 20
 
 loop_count = 0
 
@@ -219,7 +219,7 @@ while True:
 # applying the recal_table
 recal_suffix = 'recal_' + dedup_suffix
 recal_dedup_sorted_bam = INPUT_DIR + recal_suffix
-ram_to_use = 100
+ram_to_use = 20
 
 loop_count = 0
 

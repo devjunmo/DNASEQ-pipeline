@@ -103,7 +103,7 @@ while True:
     try:
         mapping_time = time.time()
         err_msg = f'An_error_occurred_in_consolidating_gvcfs.sh:_Consolidating_GVCF_files_was_failed.'
-        sp.check_call(fr'sh germline_short/consolidating_gvcfs.sh {db_dir} {batch_size} {INTERVAL_FILE_PATH} {map_path} {tmp_dir} {consolidating_thread} {seq_type}', shell=True)
+        sp.check_call(fr'nohup sh germline_short/consolidating_gvcfs.sh {db_dir} {batch_size} {INTERVAL_FILE_PATH} {map_path} {tmp_dir} {consolidating_thread} {seq_type} &', shell=True)
         break
 
     except sp.CalledProcessError as e:
@@ -116,14 +116,14 @@ while True:
 
 data_group_name = db_dir_name.split('_')[0]
 output_prefix = GVCF_DIR + data_group_name
-output_path = output_prefix + 'vcf.gz'
+output_path = output_prefix + '.vcf.gz'
 
 # joint call
 while True:
     try:
         mapping_time = time.time()
         err_msg = f'An_error_occurred_in_joint_call.sh:_JointCalling_was_failed.'
-        sp.check_call(fr'sh germline_short/joint_call.sh {REF_GENOME_PATH} {output_path} {db_snp_for_joint_call} {db_dir} {tmp_dir} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+        sp.check_call(fr'nohup sh germline_short/joint_call.sh {REF_GENOME_PATH} {output_path} {db_snp_for_joint_call} {db_dir} {tmp_dir} {INTERVAL_FILE_PATH} {seq_type} &', shell=True)
         break
 
     except sp.CalledProcessError as e:
@@ -131,3 +131,4 @@ while True:
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
+

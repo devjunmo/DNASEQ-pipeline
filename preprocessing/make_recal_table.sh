@@ -26,7 +26,7 @@ ks_1000G=$r_path"1000G_phase1.indels.b37.vcf"
 case "$5" in
     "WES")
         source activate gatk4
-        gatk --java-options $ram BaseRecalibrator \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" BaseRecalibrator \
             -I $input \
             -O $output \
             --known-sites $ks_dbSNP \

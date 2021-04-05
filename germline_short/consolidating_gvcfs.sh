@@ -17,12 +17,13 @@ fi
 
 # "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx80G"
 source activate gatk4
-gatk --java-options "-Xmx80G" GenomicsDBImport \
+gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" GenomicsDBImport \
     --genomicsdb-workspace-path $1 \
     --batch-size $2 \
     -L $3 \
     --sample-name-map $4 \
     --tmp-dir $5 \
-    --reader-threads $6
+    --reader-threads $6 \
+    --merge-input-intervals
 conda deactivate
 

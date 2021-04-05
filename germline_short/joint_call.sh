@@ -17,14 +17,15 @@ fi
 
 # "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx80G"
 
+# --only-output-calls-starting-in-intervals
+# Restrict variant output to sites that start within provided intervals. This option can only be activated if intervals are specified.
+
 source activate gatk4
-gatk --java-options "-Xmx80G" GenotypeGVCFs  \
+gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" GenotypeGVCFs  \
     -R $1 \
     -O $2 \
     -D $3 \
-    -G StandardAnnotation \
     --only-output-calls-starting-in-intervals \
-    --use-new-qual-calculator \
     -V gendb://$4 \
     --tmp-dir $5 \
     -L $6

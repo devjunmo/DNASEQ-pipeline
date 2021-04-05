@@ -13,8 +13,11 @@ REF_GENOME_PATH = '/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta'
 INTERVAL_FILE_PATH = '/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.bed'
 seq_type = "WES"
 
-# preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
+# Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
 WORKING_TYPE = "gs"
+
+# QC
+qc_output_path = 'pass'
 
 # Data pre-processing for variant discovery           
 INPUT_DIR = r'/home/jun9485/data/WES/HN00144124/'   # 이 디렉토리에 계속 생성시킬것
@@ -33,7 +36,8 @@ GSDIR = r'gs/'
 
 #################################################################################
 
-
+if WORKING_TYPE == 'qc':
+    pass
 
 
 if WORKING_TYPE == "pp":
@@ -94,6 +98,7 @@ elif WORKING_TYPE == "gs":
 
         # HaplotypeCaller 실행
         sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+
 
     while True:
         sleep(300)
