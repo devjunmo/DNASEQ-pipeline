@@ -21,7 +21,7 @@ fi
 # Restrict variant output to sites that start within provided intervals. This option can only be activated if intervals are specified.
 
 source activate gatk4
-gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" GenotypeGVCFs  \
+gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" GenotypeGVCFs  \
     -R $1 \
     -O $2 \
     -D $3 \

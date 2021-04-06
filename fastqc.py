@@ -2,6 +2,7 @@ import subprocess as sp
 import glob
 import natsort
 import time
+from time import sleep
 
 
 # qsub 사용하지 않고 순차적으로 돌리는 코드
@@ -31,4 +32,5 @@ for i in range(path_len):
 
     # fastqc -o ~/data/WGS/fastqc/ -f fastq -t 4 Teratoma-17_R1.fastq.gz
     sp.call(f'sh fastqc -o {OUTPUT_DIR} -f {file_type} -t {thread} {read}', shell=True)
+    sleep(1800)
 

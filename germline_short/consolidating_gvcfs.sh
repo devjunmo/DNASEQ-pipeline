@@ -17,7 +17,7 @@ fi
 
 # "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx80G"
 source activate gatk4
-gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" GenomicsDBImport \
+gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" GenomicsDBImport \
     --genomicsdb-workspace-path $1 \
     --batch-size $2 \
     -L $3 \

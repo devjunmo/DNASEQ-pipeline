@@ -19,7 +19,7 @@ if [ "$6" = "WGS" ]; then
 fi
 
 source activate gatk4
-gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" ApplyBQSR \
+gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" ApplyBQSR \
     -I $inputBam \
     -O $outputBam \
     -R $ref_genome \

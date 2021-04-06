@@ -22,7 +22,7 @@ fi
 
 # "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx30G"
 source activate gatk4
-gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" HaplotypeCaller \
+gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" HaplotypeCaller \
     -R $ref_genome \
     -O $output \
     -I $inputBam \

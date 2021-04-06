@@ -16,7 +16,7 @@ patterned=2500
 case "$3" in
     True)
         source activate gatk4
-        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" MarkDuplicates \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" MarkDuplicates \
             -I $input \
             -O $output \
             --METRICS_FILE $5marked_dup_metrics.txt \
@@ -29,7 +29,7 @@ case "$3" in
     ;;
     False)
         source activate gatk4
-        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx10G" MarkDuplicates \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" MarkDuplicates \
             -I $input \
             -O $output \
             --METRICS_FILE $5marked_dup_metrics.txt \
