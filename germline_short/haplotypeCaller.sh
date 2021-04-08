@@ -25,40 +25,25 @@ fi
 case "$6" in
     gvcf)
         source activate gatk4
-        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" HaplotypeCaller \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx20G" HaplotypeCaller \
             -R $ref_genome \
             -O $output \
             -I $inputBam \
             -L $interval \
-            -ERC GVCF \
+            -ERC GVCF
         conda deactivate
     ;;
     single)
         source activate gatk4
-        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" HaplotypeCaller \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx20G" HaplotypeCaller \
             -R $ref_genome \
             -O $output \
             -I $inputBam \
-            -L $interval \
+            -L $interval
         conda deactivate
     ;;
     *)
-        echo "IsRmDupInOutput 인자에 True or False를 입력하시오"
+        echo "mode를 확인하시오 gvcf or single 입력"
         exit 1
     ;;
 esac
-
-
-
-
-
-
-source activate gatk4
-gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" HaplotypeCaller \
-    -R $ref_genome \
-    -O $output \
-    -I $inputBam \
-    -L $interval \
-    -ERC GVCF \
-
-conda deactivate

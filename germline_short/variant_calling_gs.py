@@ -16,6 +16,8 @@ max_looping = 50
 
 db_dir_name = r'HN00144124_DB/' # 이 형식 지켜줄것
 
+haplotypeCaller_mode = 'single'
+
 db_snp_for_joint_call = r'/home/jun9485/data/refGenome/b37/dbsnp_138.b37.vcf'
 
 tmp_dir_name = 'largeTmp'
@@ -33,6 +35,7 @@ def rm_file(is_rm, file):
             os.remove(file)
         except FileNotFoundError:
             print(f'{file} 파일이 존재하지 않아 삭제하지 못함')
+
 
 def main(argv):
     file_name = argv[0]
@@ -100,6 +103,10 @@ batch_size = 50
 os.makedirs(f'{GVCF_DIR}{tmp_dir_name}')
 tmp_dir = GVCF_DIR + f'{tmp_dir_name}/'
 
+
+
+
+
 loop_count = 0
 
 while True:
@@ -117,9 +124,11 @@ while True:
 
 
 
+
 data_group_name = db_dir_name.split('_')[0]
 output_prefix = GVCF_DIR + data_group_name
 output_path = output_prefix + '.vcf.gz'
+loop_count = 0
 
 # joint call
 while True:
