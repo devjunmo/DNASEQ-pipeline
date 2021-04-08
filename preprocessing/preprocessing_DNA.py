@@ -38,7 +38,10 @@ seq_type = ''
 
 def rm_file(is_rm, file):
     if is_rm is True:
-        os.remove(file)
+        try:
+            os.remove(file)
+        except FileNotFoundError:
+            print(f'{file} 파일이 존재하지 않아 삭제하지 못함')
 
 
 def main(argv):
@@ -98,7 +101,7 @@ while True:
     try:
         mapping_time = time.time()
         err_msg = f'An_error_occurred_in_mappingBwaPE.sh:_Mapping_reads_was_failed.{read_name}'
-        sp.check_call(fr'sh mappingBwaPE.sh {read1} {read2} {output_sam} {THREADS} {REF_GENOME_PATH} {read_name}', shell=True)
+        sp.check_call(fr'sh preprocessing/mappingBwaPE.sh {read1} {read2} {output_sam} {THREADS} {REF_GENOME_PATH} {read_name}', shell=True)
         break
 
     except sp.CalledProcessError as e:
@@ -118,7 +121,7 @@ while True:
     try:
         s2b_time = time.time()
         err_msg = f'An_error_occurred_in_sam2bam.sh:_Converting_SAM_to_BAM_was_failed._{read_name}'
-        sp.check_call(fr'sh sam2bam.sh {output_sam} {output_bam} {THREADS}', shell=True)
+        sp.check_call(fr'sh preprocessing/sam2bam.sh {output_sam} {output_bam} {THREADS}', shell=True)
         rm_file(rm_sam, output_sam) # sam 삭제 여부
         break
 
@@ -140,7 +143,7 @@ while True:
     try:
         sorting_time = time.time()
         err_msg = f'An_error_occurred_in_sortingBam.sh:_Sorting_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh sortingBam.sh {output_bam} {sorted_bam} {THREADS} {read_name}', shell=True)
+        sp.check_call(fr'sh preprocessing/sortingBam.sh {output_bam} {sorted_bam} {THREADS} {read_name}', shell=True)
         break
 
     except sp.CalledProcessError as e:
@@ -163,7 +166,7 @@ while True:
     try:
         dedup_time = time.time()
         err_msg = f'An_error_occurred_in_deduplicateBam.sh:_Deduplicating_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh deduplicateBam.sh {sorted_bam} {dedup_sorted_bam} {False} {ram_to_use} {metric_prefix}', shell=True)
+        sp.check_call(fr'sh preprocessing/deduplicateBam.sh {sorted_bam} {dedup_sorted_bam} {False} {ram_to_use} {metric_prefix}', shell=True)
         rm_file(rm_sorted_bam, sorted_bam) # sorted bam 삭제
         break
 
@@ -183,7 +186,7 @@ while True:
     try:
         dedup_time = time.time()
         err_msg = f'An_error_occurred_in_indexing_dedup_bam.sh:_Indexing_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh indexing_dedup_bam.sh {THREADS} {dedup_sorted_bam}', shell=True)
+        sp.check_call(fr'sh preprocessing/indexing_dedup_bam.sh {THREADS} {dedup_sorted_bam}', shell=True)
         rm_file(rm_raw_bam, output_bam) # raw bam 삭제
         break
 
@@ -205,7 +208,7 @@ while True:
     try:
         mk_table_time = time.time()
         err_msg = f'An_error_occurred_in_make_recal_table.sh:_Making_a_recal.table_file_was_failed._{read_name}'
-        sp.check_call(fr'sh make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {ram_to_use} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+        sp.check_call(fr'sh preprocessing/make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {ram_to_use} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
         break
 
     except sp.CalledProcessError as e:
@@ -227,7 +230,7 @@ while True:
     try:
         mk_table_time = time.time()
         err_msg = f'An_error_occurred_in_applyBQSR.sh:_Applying_the_recalTable_to_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh applyBQSR.sh {dedup_sorted_bam} {recal_dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {ram_to_use} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+        sp.check_call(fr'sh preprocessing/applyBQSR.sh {dedup_sorted_bam} {recal_dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {ram_to_use} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
         rm_file(rm_dedup_sorted_bam, dedup_sorted_bam)
         break
 

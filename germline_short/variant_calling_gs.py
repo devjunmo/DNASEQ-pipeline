@@ -29,7 +29,10 @@ seq_type = ''
 
 def rm_file(is_rm, file):
     if is_rm is True:
-        os.remove(file)
+        try:
+            os.remove(file)
+        except FileNotFoundError:
+            print(f'{file} 파일이 존재하지 않아 삭제하지 못함')
 
 def main(argv):
     file_name = argv[0]
