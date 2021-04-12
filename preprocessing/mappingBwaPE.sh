@@ -30,3 +30,5 @@ bwa mem \
     $ref_genome $fastq1 $fastq2 > $output_path
     
 conda deactivate
+
+sleep 60s

@@ -8,3 +8,5 @@ fi
 
 
 samtools index -@ $1 $2
+
+sleep 30s

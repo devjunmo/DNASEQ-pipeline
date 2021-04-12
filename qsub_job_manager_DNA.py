@@ -17,7 +17,7 @@ INTERVAL_FILE_PATH = '/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.b
 seq_type = "WES"
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
-WORKING_TYPE = "gs"
+WORKING_TYPE = "pp"
 
 # QC
 qc_output_path = 'pass'
@@ -71,7 +71,7 @@ if WORKING_TYPE == "pp":
     print('입력할 paired end reads의 총 수 =', path_len, '\n')
     print(input_path_list)
 
-    exit(0) # path list 확인하고 싶으면 이거 풀기
+    # exit(0) # path list 확인하고 싶으면 이거 풀기
 
     for i in range(path_len):
         if i%2 == 0: # 짝수면
@@ -85,8 +85,9 @@ if WORKING_TYPE == "pp":
             prefix = INPUT_DIR + read_name
 
             # "ha:b:n:p:i:", ["help", "readA=", "readB=", "readName=", "prefix=", "inputDir="]
-            sp.call(f'qsub ~/src/qsub.1 python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} \
-                -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
+            sp.call(f'nohup python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} \
+                -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+            sleep(6000) # 100분 sleep
 
 
 elif WORKING_TYPE == "gs":

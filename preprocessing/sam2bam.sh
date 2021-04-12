@@ -8,3 +8,5 @@ fi
 
 
 samtools view -Sb -h -@ $3 $1 -o $2
+
+sleep 20s

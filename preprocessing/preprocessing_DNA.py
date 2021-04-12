@@ -12,7 +12,7 @@ import os
 
 # !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
 
-THREADS = 16                                        
+THREADS = 14                                        
 REF_GENOME_DIR = '/home/jun9485/data/refGenome/b37/'
 
  # 중간 생성물 지우기 여부
@@ -23,7 +23,7 @@ rm_dedup_sorted_bam = True
 
 sorting_order = 'coordinate' # or queryname
 
-max_looping = 50
+max_looping = 1
 
 ##############################################################################################
 
@@ -152,6 +152,7 @@ while True:
         if loop_count > max_looping:
             exit(0)
 
+exit(0)
 
 
 # dedup bam

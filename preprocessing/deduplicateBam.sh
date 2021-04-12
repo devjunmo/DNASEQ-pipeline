@@ -22,3 +22,5 @@ source activate gatk4
         --CREATE_MD5_FILE true \
         --ASSUME_SORT_ORDER $3
 conda deactivate
+
+sleep 30s
