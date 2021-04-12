@@ -10,54 +10,36 @@ fi
 inputBam=$1
 outputBam=$2
 table=$3
-
 ref_genome=$4
 interval=$6
-
-if [ "$6" = "WGS" ]; then
-    interval= 
-fi
-
-source activate gatk4
-gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" ApplyBQSR \
-    -I $inputBam \
-    -O $outputBam \
-    -R $ref_genome \
-    -bqsr $3 \
-    -L $interval \
-    --use-original-qualities \
-    --static-quantized-quals 10 --static-quantized-quals 20 --static-quantized-quals 30 \
-    --add-output-sam-program-record \
-    --create-output-bam-md5
-conda deactivate
-
-
 
 
 case "$5" in
     "WES")
         source activate gatk4
-        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" BaseRecalibrator \
-            -I $input \
-            -O $output \
-            --known-sites $ks_dbSNP \
-            --known-sites $ks_mills \
-            --known-sites $ks_1000G \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" ApplyBQSR \
+            -I $inputBam \
+            -O $outputBam \
             -R $ref_genome \
+            -bqsr $table \
+            -L $interval \
             --use-original-qualities \
-            -L $interval
+            --static-quantized-quals 10 --static-quantized-quals 20 --static-quantized-quals 30 \
+            --add-output-sam-program-record \
+            --create-output-bam-md5
         conda deactivate
     ;;
     "WGS")
         source activate gatk4
-        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" BaseRecalibrator \
-            -I $input \
-            -O $output \
-            --known-sites $ks_dbSNP \
-            --known-sites $ks_mills \
-            --known-sites $ks_1000G \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" ApplyBQSR \
+            -I $inputBam \
+            -O $outputBam \
             -R $ref_genome \
+            -bqsr $table \
             --use-original-qualities \
+            --static-quantized-quals 10 --static-quantized-quals 20 --static-quantized-quals 30 \
+            --add-output-sam-program-record \
+            --create-output-bam-md5
         conda deactivate
     ;;
     *)

@@ -229,7 +229,7 @@ while True:
     try:
         mk_table_time = time.time()
         err_msg = f'An_error_occurred_in_applyBQSR.sh:_Applying_the_recalTable_to_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/applyBQSR.sh {dedup_sorted_bam} {recal_dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {ram_to_use} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+        sp.check_call(fr'sh preprocessing/applyBQSR.sh {dedup_sorted_bam} {recal_dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
         rm_file(rm_dedup_sorted_bam, dedup_sorted_bam)
         break
 
