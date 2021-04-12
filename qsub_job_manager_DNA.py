@@ -85,7 +85,7 @@ if WORKING_TYPE == "pp":
             prefix = INPUT_DIR + read_name
 
             # "ha:b:n:p:i:", ["help", "readA=", "readB=", "readName=", "prefix=", "inputDir="]
-            sp.call(f'nohup python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} \
+            sp.call(f'qsub ~/src/qsub.4 python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} \
                 -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
             sleep(6000) # 100분 sleep
 
