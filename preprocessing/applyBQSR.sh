@@ -1,18 +1,18 @@
 #!/bin/bash -e
 
-if [ $# -lt 7 ]
+if [ $# -lt 6 ]
 then
-    echo usage: $0 [INPUT_BAM_FILE] [/path/output.bam] [table_path] [RefGenome] [RAM] [seqType] [interval] 
+    echo usage: $0 [INPUT_BAM_FILE] [/path/output.bam] [table_path] [RefGenome] [seqType] [interval] 
     exit 1
 fi
 
 
 inputBam=$1
 outputBam=$2
-table = $3
-ram="-Xmx"$5"G"
+table=$3
+
 ref_genome=$4
-interval=$7
+interval=$6
 
 if [ "$6" = "WGS" ]; then
     interval= 
@@ -30,3 +30,39 @@ gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G
     --add-output-sam-program-record \
     --create-output-bam-md5
 conda deactivate
+
+
+
+
+case "$5" in
+    "WES")
+        source activate gatk4
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" BaseRecalibrator \
+            -I $input \
+            -O $output \
+            --known-sites $ks_dbSNP \
+            --known-sites $ks_mills \
+            --known-sites $ks_1000G \
+            -R $ref_genome \
+            --use-original-qualities \
+            -L $interval
+        conda deactivate
+    ;;
+    "WGS")
+        source activate gatk4
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" BaseRecalibrator \
+            -I $input \
+            -O $output \
+            --known-sites $ks_dbSNP \
+            --known-sites $ks_mills \
+            --known-sites $ks_1000G \
+            -R $ref_genome \
+            --use-original-qualities \
+        conda deactivate
+    ;;
+    *)
+        echo "seqType = WES or WGS"
+        exit 1
+    ;;
+esac
+

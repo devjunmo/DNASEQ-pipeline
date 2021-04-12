@@ -10,8 +10,10 @@ import os
 ####################### hyper parameters ####################################################
 # 디버깅모드시 실행파일은 주석처리, 중간생성물 지우기 여부는 False처리, max_looping=1 처리!!
 
+# !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
+
 THREADS = 16                                        
-# REF_GENOME_PATH = '/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta' 
+REF_GENOME_DIR = '/home/jun9485/data/refGenome/b37/'
 
  # 중간 생성물 지우기 여부
 rm_sam = True
@@ -156,7 +158,6 @@ while True:
 metric_prefix = INPUT_DIR + read_name + '_'
 dedup_suffix = 'deduped_' + sort_suffix
 dedup_sorted_bam = INPUT_DIR + dedup_suffix
-ram_to_use = 20
 
 loop_count = 0
 
@@ -206,7 +207,7 @@ while True:
     try:
         mk_table_time = time.time()
         err_msg = f'An_error_occurred_in_make_recal_table.sh:_Making_a_recal.table_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {ram_to_use} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+        sp.check_call(fr'sh preprocessing/make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {REF_GENOME_DIR} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
         break
 
     except sp.CalledProcessError as e:

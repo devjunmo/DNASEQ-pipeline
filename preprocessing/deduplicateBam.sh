@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-if [ $# -lt 5 ]
+if [ $# -lt 4 ]
 then
     echo usage: $0 [INPUT_BAM_FILE] [/path/to/output.bam] [sorting_order] [metricPrefix]
     exit 1
