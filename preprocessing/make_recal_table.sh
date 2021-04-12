@@ -41,7 +41,7 @@ case "$5" in
             --known-sites $ks_mills \
             --known-sites $ks_1000G \
             -R $ref_genome \
-            --use-original-qualities \
+            --use-original-qualities
         conda deactivate
     ;;
     *)
