@@ -61,7 +61,9 @@ if WORKING_TYPE == "pp":
         mk_init_file_list(INPUT_DIR, RAW_READS, sample_group_name)
     # 한줄씩 읽어서 input_path_list에 넣기 
     f = open(rf'{INPUT_DIR}{sample_group_name}.txt', 'r')
-    input_path_list = f.readlines()
+    input_path_list = []
+    for i in f.readlines():
+        input_path_list.append(i[:-1])
     # input_path_list = glob.glob(INPUT_DIR + RAW_READS)    
     input_path_list = natsort.natsorted(input_path_list)
     path_len = len(input_path_list)
