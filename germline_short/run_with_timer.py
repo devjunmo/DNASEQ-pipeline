@@ -6,10 +6,10 @@ from time import sleep
 
 #######################################
 
-work_type = 'CNNScoreVariants'
+work_type = 'FilterVariantTranches'
 
-run_concurr = 1 # 동시에 1개 돌림
-sleep_time = 4200 # 넉넉잡은 시간 / 70분
+run_concurr = 3 # 동시에 1개 돌림
+sleep_time = 80 # 넉넉잡은 시간
 
 INPUT_DIR = r'/home/jun9485/data/WES/HN00144124/'
 TARGET_FILE = '*.bam'
@@ -37,7 +37,10 @@ seq_type = "WES"
 
 ##########################################
 
+########[ FilterVariantTranches ]#########
+input_scored_vcf_file = 'scored_*.vcf'
 
+##########################################
 
 
 if work_type == 'HaplotypeCaller':
@@ -111,3 +114,32 @@ elif work_type == 'CNNScoreVariants':
             count = 0
             sleep(sleep_time)
 
+
+# FilterVariantTranches
+elif work_type == 'FilterVariantTranches':
+
+    input_vcf_list = glob.glob(docker_INPUT_VCF_DIR + input_scored_vcf_file) 
+    input_vcf_list = natsort.natsorted(input_vcf_list)
+    vcf_len = len(input_vcf_list)
+    
+    print('input vcf.gz file_num =', vcf_len, '\n')
+    print(input_vcf_list)
+
+    # exit(0)
+
+    count = 0
+
+    for i in range(vcf_len):
+        read_name = input_vcf_list[i].split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
+        output_vcf_prefix = docker_INPUT_VCF_DIR + 'filtered_scored_'
+        output_vcf_suffix = '.vcf'
+        output_vcf = output_vcf_prefix + read_name + output_vcf_suffix
+    
+        # FilterVariantTranches 실행
+        sp.call(f'nohup sh filter_variant_tranches.sh {input_vcf_list[i]} {output_vcf} {docker_INTERVAL} {model} {seq_type} &', shell=True)
+
+        count = count + 1
+
+        if count == run_concurr:
+            count = 0
+            sleep(sleep_time)

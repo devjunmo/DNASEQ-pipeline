@@ -8,3 +8,4 @@ fi
 
 samtools sort -@ $3 -O BAM -o $2 -T sorted_T_$4 $1
 
+ 

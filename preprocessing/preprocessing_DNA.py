@@ -19,9 +19,7 @@ rm_raw_bam = True
 rm_sorted_bam = True
 rm_dedup_sorted_bam = True
 
-
-# seq_type = "WES" # wes = interval file 요구됨 (알려진 exon 자리) / mkrecal, recal
-# INTERVAL_FILE_PATH = '/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.bed'
+sorting_order = 'coordinate' # or queryname
 
 max_looping = 50
 
@@ -133,7 +131,7 @@ while True:
 
 
 
-# sorting bam
+# sorting bam -> sorting_order: coordinate (-n 주면 queryname)
 sort_suffix = 'sorted_' + read_name + '.bam'
 sorted_bam = INPUT_DIR + sort_suffix
 
@@ -166,7 +164,7 @@ while True:
     try:
         dedup_time = time.time()
         err_msg = f'An_error_occurred_in_deduplicateBam.sh:_Deduplicating_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/deduplicateBam.sh {sorted_bam} {dedup_sorted_bam} {False} {ram_to_use} {metric_prefix}', shell=True)
+        sp.check_call(fr'sh preprocessing/deduplicateBam.sh {sorted_bam} {dedup_sorted_bam} {sorting_order} {metric_prefix}', shell=True)
         rm_file(rm_sorted_bam, sorted_bam) # sorted bam 삭제
         break
 
