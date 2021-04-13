@@ -16,6 +16,13 @@ REF_GENOME_PATH = '/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta'
 INTERVAL_FILE_PATH = '/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.bed'
 seq_type = "WES"
 
+# qsub 사용 여부
+is_using_qsub = True
+
+# 큐섭 사용 안하고 시퀀셜하게 진행할때
+flow_sleep_time = 6000 # 초단위 
+max_parallel_num = 2 
+
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
 WORKING_TYPE = "pp"
 
@@ -72,6 +79,8 @@ if WORKING_TYPE == "pp":
     print(input_path_list)
 
     # exit(0) # path list 확인하고 싶으면 이거 풀기
+    
+    parallel_count = 0
 
     for i in range(path_len):
         if i%2 == 0: # 짝수면
@@ -84,10 +93,14 @@ if WORKING_TYPE == "pp":
             read_name = input_path_list[i].split('.')[-3].split(r'/')[-1].split(r'_')[-2] # Teratoma-13
             prefix = INPUT_DIR + read_name
 
-            # "ha:b:n:p:i:", ["help", "readA=", "readB=", "readName=", "prefix=", "inputDir="]
-            sp.call(f'qsub ~/src/qsub.4 python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} \
-                -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
-            sleep(6000) # 100분 sleep
+            if is_using_qsub is True:
+                sp.call(f'qsub ~/src/qsub.4 python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+            elif is_using_qsub is False:
+                sp.call(f'python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                parallel_count += 1
+                if parallel_count >= max_parallel_num:
+                    parallel_count = 0
+                    sleep(flow_sleep_time)
 
 
 elif WORKING_TYPE == "gs":
