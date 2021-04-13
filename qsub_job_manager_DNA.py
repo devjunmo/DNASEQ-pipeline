@@ -18,6 +18,7 @@ seq_type = "WES"
 
 # qsub 사용 여부
 is_using_qsub = True
+qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 # 큐섭 사용 안하고 시퀀셜하게 진행할때
 flow_sleep_time = 6000 # 초단위 
@@ -94,7 +95,7 @@ if WORKING_TYPE == "pp":
             prefix = INPUT_DIR + read_name
 
             if is_using_qsub is True:
-                sp.call(f'qsub ~/src/qsub.4 python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                sp.call(f'qsub {qsub_config_name} python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
             elif is_using_qsub is False:
                 sp.call(f'python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
                 parallel_count += 1
