@@ -3,13 +3,14 @@ import glob
 import natsort
 import time
 from time import sleep
+import os
 
 # script형태의 python 파일
 # 사용시 hyper parameters에 해당하는 부분 유동적으로 수정
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'HN00144124'
+sample_group_name = 'HN00144124_gs' # pp일때는 안붙였어서 구분자 목적으로 언더바
 is_making_input_list = True
 
 REF_GENOME_PATH = '/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta' 
@@ -35,8 +36,13 @@ INPUT_DIR = r'/home/jun9485/data/WES/HN00144124/'   # 이 디렉토리에 계속
 RAW_READS = r'*.fastq.gz'                                                         
 
 # Germline short variant discovery (SNPs + Indels)
-PROCESSED_BAM = r'*.bam'
+PROCESSED_BAM = r'recal_*.bam'
 GSDIR = r'gs/'
+
+is_single_unit_processing = True
+
+    ## HaplotypeCaller(hc) / FilterVariantTranches(ft) / 
+gs_work_type = 'hc'
 
 
 # Somatic short variant discovery (SNVs + Indels)
@@ -47,8 +53,8 @@ GSDIR = r'gs/'
 
 #################################################################################
 
-def mk_init_file_list(_input_dir, _raw_read_form, group_name): # fastq파일의 부재로 중간지점 스타트 불가능한 문제 해결목적
-    _input_path_list = glob.glob(_input_dir + _raw_read_form)
+def mk_init_file_list(_input_dir, _input_form, group_name): # fastq파일의 부재로 중간지점 스타트 불가능한 문제 해결목적
+    _input_path_list = glob.glob(_input_dir + _input_form)
     _input_path_list = natsort.natsorted(_input_path_list)
     _output_path = _input_dir + sample_group_name + '.txt'
     
@@ -105,47 +111,80 @@ if WORKING_TYPE == "pp":
 
 
 elif WORKING_TYPE == "gs":
-    # Germline short variant discovery (SNPs + Indels) 
-    input_path_list = glob.glob(INPUT_DIR + PROCESSED_BAM)    
+    if os.path.isdir(INPUT_DIR + GSDIR) is False:
+        os.mkdir(INPUT_DIR + GSDIR)
+    if os.path.isfile(INPUT_DIR + sample_group_name + '.txt') is False:
+        mk_init_file_list(INPUT_DIR, PROCESSED_BAM, sample_group_name)
+    
+    # 한줄씩 읽어서 input_path_list에 넣기 
+    f = open(rf'{INPUT_DIR}{sample_group_name}.txt', 'r')
+    input_path_list = []
+    for i in f.readlines():
+        input_path_list.append(i[:-1])  
     input_path_list = natsort.natsorted(input_path_list)
     path_len = len(input_path_list)
 
-    print('입력할 sample의 총 수 =', path_len, '\n')
+    print('입력 예정 sample의 총 수 =', path_len, '\n')
     print(input_path_list)
 
     # exit(0) # path list 확인하고 싶으면 이거 풀기
 
-    # read_name_list = []
-    # prefix_list = []
-    # gvcf_list = []
+    OUTPUT_GS_DIR = INPUT_DIR + GSDIR
 
-    INPUT_GS_DIR = INPUT_DIR + GSDIR
+    if is_single_unit_processing is True:
+        haplotype_caller_mode = 'single'
+        for i in range(path_len):
+            process = round(i/path_len, 2) * 100
+            print(f'{process}% 진행')
 
-    for i in range(path_len):
-        process = round(i/path_len, 2) * 100
-        print(f'{process}% 진행')
+            bam_file = input_path_list[i]
+            # sample: recal_deduped_sorted_hiPS36-C.bam
+            read_name = bam_file.split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
+            
+            output_raw_vcf = OUTPUT_GS_DIR + read_name + '.vcf.gz'
+            output_prefix = OUTPUT_GS_DIR + read_name
 
-        bamfile = input_path_list[i]
-        # sample: recal_deduped_sorted_hiPS36-C.bam
-        read_name = input_path_list[i].split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
+            if gs_work_type == 'hc':
+                # HaplotypeCaller 실행 <- .244서버에서 docker로 CNN돌려야 해서 부득이하게 분리
+                if is_using_qsub is True:
+                    sp.call(f'qsub {qsub_config_name} sh germline_short/haplotypeCaller.sh {REF_GENOME_PATH} {output_raw_vcf} {bam_file} {INTERVAL_FILE_PATH} {seq_type} {haplotype_caller_mode}', shell=True)
+                elif is_using_qsub is False:
+                    exit(0)
+            elif gs_work_type == 'ft':
+                pass
+            
+
+            # HaplotypeCaller 실행
+            # sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bam_file} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+            # sp.call(f'python germline_short/variant_calling_single_gs.py -g {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
+
+    elif is_single_unit_processing is False:
+        for i in range(path_len):
+            process = round(i/path_len, 2) * 100
+            print(f'{process}% 진행')
+
+            bamfile = input_path_list[i]
+            # sample: recal_deduped_sorted_hiPS36-C.bam
+            read_name = input_path_list[i].split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
+            
+            prefix = OUTPUT_GS_DIR + read_name
+            
+            output_gvcf = OUTPUT_GS_DIR + read_name + '.g.vcf.gz'
+
+            # HaplotypeCaller 실행
+            sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+
+        while True:
+            sleep(300)
+            val = sp.check_output(f'qstat', shell=True, universal_newlines=True)
+            if val == "":
+                print("GVCF 생성 완료")
+                break
         
-        prefix = INPUT_GS_DIR + read_name
-        
-        output_gvcf = INPUT_GS_DIR + read_name + '.g.vcf.gz'
 
-        # HaplotypeCaller 실행
-        sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+        sp.call(f'python germline_short/variant_calling_gs.py -g {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
 
-
-    while True:
-        sleep(300)
-        val = sp.check_output(f'qstat', shell=True, universal_newlines=True)
-        if val == "":
-            print("GVCF 생성 완료")
-            break
     
-
-    sp.call(f'python germline_short/variant_calling_gs.py -g {INPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
         
     
 

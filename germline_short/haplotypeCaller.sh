@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-if [ $# -lt 5 ]
+if [ $# -lt 6 ]
 then
     echo usage: $0 [RefGenome] [output.g.vcf.gz OR output.vcf.gz] [input.bam] [interval] [seqType: WGS/WES] [mode: gvcf or single]
     exit 1
