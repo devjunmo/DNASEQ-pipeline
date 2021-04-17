@@ -11,6 +11,7 @@ input=$1
 output=$2
 ref_genome=$3
 ref_dir=$4
+
 interval=$6
 
 ks_dbSNP=$ref_dir"dbsnp_138.b37.vcf"

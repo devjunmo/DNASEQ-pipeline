@@ -23,6 +23,7 @@ qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 # 큐섭 사용 안하고 시퀀셜하게 진행할때
 flow_sleep_time = 6000 # 초단위 
+is_using_parallel = False
 max_parallel_num = 2 
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
@@ -41,8 +42,7 @@ GSDIR = r'gs/'
 
 is_single_unit_processing = True
 
-    ## HaplotypeCaller(hc) / FilterVariantTranches(ft) / 
-gs_work_type = 'hc'
+
 
 
 # Somatic short variant discovery (SNVs + Indels)
@@ -103,11 +103,17 @@ if WORKING_TYPE == "pp":
             if is_using_qsub is True:
                 sp.call(f'qsub {qsub_config_name} python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
             elif is_using_qsub is False:
-                sp.call(f'python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
-                parallel_count += 1
-                if parallel_count >= max_parallel_num:
-                    parallel_count = 0
-                    sleep(flow_sleep_time)
+                if max_parallel_num == 1:
+                    sp.call(f'python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
+                elif max_parallel_num > 1:
+                    sp.call(f'python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                    parallel_count += 1
+                    if parallel_count >= max_parallel_num:
+                        parallel_count = 0
+                        sleep(flow_sleep_time)
+                else:
+                    print("parallel_count must be >= 1")
+                    exit(1)
 
 
 elif WORKING_TYPE == "gs":
@@ -141,17 +147,24 @@ elif WORKING_TYPE == "gs":
             # sample: recal_deduped_sorted_hiPS36-C.bam
             read_name = bam_file.split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
             
+
             output_raw_vcf = OUTPUT_GS_DIR + read_name + '.vcf.gz'
             output_prefix = OUTPUT_GS_DIR + read_name
 
-            if gs_work_type == 'hc':
-                # HaplotypeCaller 실행 <- .244서버에서 docker로 CNN돌려야 해서 부득이하게 분리
-                if is_using_qsub is True:
-                    sp.call(f'qsub {qsub_config_name} sh germline_short/haplotypeCaller.sh {REF_GENOME_PATH} {output_raw_vcf} {bam_file} {INTERVAL_FILE_PATH} {seq_type} {haplotype_caller_mode}', shell=True)
-                elif is_using_qsub is False:
-                    exit(0)
-            elif gs_work_type == 'ft':
-                pass
+            if is_using_qsub is True:
+                sp.call(f'qsub {qsub_config_name} python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+            elif is_using_qsub is False:
+                if max_parallel_num == 1:
+                    sp.call(f'python germline_short/variant_calling_single_gs.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
+                elif max_parallel_num > 1:
+                    sp.call(f'python germline_short/variant_calling_single_gs.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                    parallel_count += 1
+                    if parallel_count >= max_parallel_num:
+                        parallel_count = 0
+                        sleep(flow_sleep_time)
+                else:
+                    print("parallel_count must be >= 1")
+                    exit(1)
             
 
             # HaplotypeCaller 실행

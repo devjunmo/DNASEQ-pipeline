@@ -11,6 +11,7 @@ inputBam=$1
 outputBam=$2
 table=$3
 ref_genome=$4
+
 interval=$6
 
 
