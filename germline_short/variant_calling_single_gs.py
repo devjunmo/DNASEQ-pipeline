@@ -18,6 +18,8 @@ gs_work_type = 'ft'
 
 CNN_model = '2D'
 
+REF_DIR = r'/home/jun9485/data/refGenome/b37/'
+
 data_source_dir = r'/home/jun9485/data/funcotator_data_source/funcotator_dataSources.v1.7.20200521g'
 
 ##############################################################################################
@@ -48,7 +50,7 @@ def main(argv):
 
 
     try:
-        opts, etc_args = getopt.getopt(argv[1:], "hb:g:R:L:y:", ["help", "BAM=", "NAME=", "GSDIR=", "ref=", "interval=", "type="])
+        opts, etc_args = getopt.getopt(argv[1:], "hb:n:G:R:L:y:", ["help", "BAM=", "NAME=", "GSDIR=", "ref=", "interval=", "type="])
 
     except getopt.GetoptError:  # 옵션지정이 올바르지 않은 경우
         print(file_name, 'option error')
@@ -125,7 +127,7 @@ if gs_work_type == 'ft':
         try:
             mapping_time = time.time()
             err_msg = f'An_error_occurred_in_filter_variant_tranches.sh:_Filtering_VCF_files_was_failed.'
-            sp.check_call(fr'sh germline_short/filter_variant_tranches.sh {output_scored_vcf} {output_filtered_scored_vcf} {INTERVAL_FILE_PATH} {CNN_model} {seq_type}', shell=True)
+            sp.check_call(fr'sh germline_short/filter_variant_tranches.sh {output_scored_vcf} {output_filtered_scored_vcf} {INTERVAL_FILE_PATH} {CNN_model} {seq_type} {REF_DIR}', shell=True)
             break
 
         except sp.CalledProcessError as e:

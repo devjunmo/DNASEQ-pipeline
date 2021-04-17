@@ -1,11 +1,18 @@
 #!/bin/bash -e
 
-if [ $# -lt 5 ]
+if [ $# -lt 6 ]
 then
-    echo usage: $0 [input.vcf] [RefGenome] [refVersion] [1D/2D] [seqType]
+    echo usage: $0 [input.vcf] [output.vcf] [interval] [1D/2D] [seqType] [ref_dir]
     exit 1
 fi
 
+
+input_vcf=$1
+output_vcf=$2
+interval=$3
+
+resource_hapmap=$6'hapmap_3.3.b37.vcf'
+resource_mills=$6'Mills_and_1000G_gold_standard.indels.b37.vcf'
 
 
 case "$4" in
@@ -22,12 +29,18 @@ case "$4" in
 esac
 
 
+if [ "$5" = "WGS" ]; then
+    interval=
+fi
 
 
-gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" Funcotator \
-     --variant variants.vcf \
-     --reference Homo_sapiens_assembly19.fasta \
-     --ref-version hg19 \
-     --data-sources-path funcotator_dataSources.v1.2.20180329 \
-     --output variants.funcotated.maf \
-     --output-file-format MAF
+gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" FilterVariantTranches \
+    -V $input_vcf \
+    --resource $resource_hapmap \
+    --resource $resource_mills \
+    --info-key $key \
+    --snp-tranche 99.95 \
+    --indel-tranche 99.4 \
+    --invalidate-previous-filters \
+    -O $output_vcf \
+    -L $interval

@@ -155,9 +155,9 @@ elif WORKING_TYPE == "gs":
                 sp.call(f'qsub {qsub_config_name} python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
             elif is_using_qsub is False:
                 if max_parallel_num == 1:
-                    sp.call(f'python germline_short/variant_calling_single_gs.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
+                    sp.call(f'python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
                 elif max_parallel_num > 1:
-                    sp.call(f'python germline_short/variant_calling_single_gs.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                    sp.call(f'python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
                     parallel_count += 1
                     if parallel_count >= max_parallel_num:
                         parallel_count = 0
