@@ -93,7 +93,7 @@ error_log_file = GS_DIR + "errorLog.txt"
 #         exit(0)
 
 
-raw_vcf = READ_NAME + 'vcf.gz'
+raw_vcf = READ_NAME + '.vcf.gz'
 output_raw_vcf = GS_DIR + raw_vcf
 
 if gs_work_type == 'hc':
@@ -113,10 +113,10 @@ if gs_work_type == 'hc':
                 exit(0)
 
 scored_prefix = 'scored_'
-output_scored_vcf = GS_DIR + scored_prefix + raw_vcf
+output_scored_vcf = GS_DIR + scored_prefix + READ_NAME + '.vcf'
 
 filterd_prefix = 'filtered_'
-output_filtered_scored_vcf = GS_DIR + filterd_prefix + scored_prefix + raw_vcf
+output_filtered_scored_vcf = GS_DIR + filterd_prefix + scored_prefix + READ_NAME + '.vcf'
 
 
 
