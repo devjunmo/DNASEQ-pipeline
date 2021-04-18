@@ -13,6 +13,7 @@ import os
 
 max_looping = 1
 
+## Hardfiltering ~ vcf2maf (hard)
 ## HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / 
 gs_work_type = 'ft'
 
@@ -93,8 +94,108 @@ error_log_file = GS_DIR + "errorLog.txt"
 #         exit(0)
 
 
+
 raw_vcf = READ_NAME + '.vcf.gz'
 output_raw_vcf = GS_DIR + raw_vcf
+
+
+if gs_work_type == 'hard':
+
+    loop_count = 0
+    haplotype_caller_mode = 'single'
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_haplotypeCaller.sh:_making_a_raw_vcf_file_was_failed.'
+            sp.check_call(fr'sh germline_short/haplotypeCaller.sh {REF_GENOME_PATH} {output_raw_vcf} {BAM_FILE} {INTERVAL_FILE_PATH} {seq_type} {haplotype_caller_mode}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
+
+
+
+    hardFilterd_prefix = 'hardFiltered_'
+    snp_type = 'SNP'
+    indel_type = 'INDEL'
+
+    snp_vcf = GS_DIR + snp_type + '_' + raw_vcf
+    indel_vcf = GS_DIR + indel_type + '_' + raw_vcf
+
+    snp_hardFiltered_output = GS_DIR + hardFilterd_prefix + snp_type + '_' + raw_vcf
+    indel_hardFiltered_output = GS_DIR + hardFilterd_prefix + indel_type + '_' + raw_vcf
+    
+
+
+    # SelectVariants - snps
+    loop_count = 0
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_SNP_vcf_file_was_failed.'
+            sp.check_call(fr'sh germline_short/select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {snp_vcf} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
+    
+
+
+    # VariantFilteration - snp filtering
+    loop_count = 0
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_variant_filteration.sh:_making_a_SNP_filtered_vcf_file_was_failed.'
+            sp.check_call(fr'sh germline_short/variant_filteration.sh {snp_vcf} {snp_hardFiltered_output} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
+
+
+
+    # SelectVariants - indels
+    loop_count = 0
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_INDEL_vcf_file_was_failed.'
+            sp.check_call(fr'sh germline_short/select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {indel_vcf} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
+    
+
+    # VariantFilteration - indel filtering
+    loop_count = 0
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_variant_filteration.sh:_making_a_INDEL_filtered_vcf_file_was_failed.'
+            sp.check_call(fr'sh germline_short/variant_filteration.sh {indel_vcf} {indel_hardFiltered_output} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
+
+
+
+
+
+
+
 
 if gs_work_type == 'hc':
     loop_count = 0
@@ -136,20 +237,20 @@ if gs_work_type == 'ft':
             if loop_count > max_looping:
                 exit(0)
 
-exit(0)
 
-# if gs_work_type == 'ft':
-#     loop_count = 0
 
-#     while True:
-#         try:
-#             mapping_time = time.time()
-#             err_msg = f'An_error_occurred_in_consolidating_gvcfs.sh:_Consolidating_GVCF_files_was_failed.'
-#             sp.check_call(fr'sh germline_short/funcotator.sh {}', shell=True)
-#             break
+if gs_work_type == 'ft':
+    loop_count = 0
 
-#         except sp.CalledProcessError as e:
-#             sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
-#             loop_count += 1
-#             if loop_count > max_looping:
-#                 exit(0)
+    while True:
+        try:
+            mapping_time = time.time()
+            err_msg = f'An_error_occurred_in_consolidating_gvcfs.sh:_Consolidating_GVCF_files_was_failed.'
+            sp.check_call(fr'sh germline_short/funcotator.sh {}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
