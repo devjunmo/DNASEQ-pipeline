@@ -124,8 +124,8 @@ if gs_work_type == 'hard':
     snp_vcf = GS_DIR + snp_type + '_' + raw_vcf
     indel_vcf = GS_DIR + indel_type + '_' + raw_vcf
 
-    snp_hardFiltered_output = GS_DIR + hardFilterd_prefix + snp_type + '_' + raw_vcf
-    indel_hardFiltered_output = GS_DIR + hardFilterd_prefix + indel_type + '_' + raw_vcf
+    snp_hardFiltered_output = GS_DIR + hardFilterd_prefix + snp_type + '_' + READ_NAME + '.vcf'
+    indel_hardFiltered_output = GS_DIR + hardFilterd_prefix + indel_type + '_' + READ_NAME + '.vcf'
     
 
 
@@ -189,7 +189,6 @@ if gs_work_type == 'hard':
             loop_count += 1
             if loop_count > max_looping:
                 exit(0)
-
 
 
 
