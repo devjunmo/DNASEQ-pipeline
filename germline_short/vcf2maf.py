@@ -35,7 +35,7 @@ print(input_VCF_list)
 exit(0)
 
 
-for i in range(input_VCF_list):
+for i in range(vcf_list_len):
     input_vcf = input_VCF_list[i]
     vcf_name = input_vcf.split('.')[-2].split(r'/')[-1].split(r'_')[-1] # Teratoma-13
     type_name = input_vcf.split('.')[-2].split(r'/')[-1].split(r'_')[-2] # INDEL
