@@ -13,8 +13,9 @@ import os
 
 max_looping = 1
 
-## Hardfiltering ~ vcf2maf (hard)
-## HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / 
+## WORK TYPE ##
+## case 1. Hardfiltering ~ vcf2maf (hard)
+## case 2. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / 
 gs_work_type = 'ft'
 
 CNN_model = '2D'

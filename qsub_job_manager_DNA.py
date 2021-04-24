@@ -119,7 +119,7 @@ if WORKING_TYPE == "pp":
 elif WORKING_TYPE == "gs":
     if os.path.isdir(INPUT_DIR + GSDIR) is False:
         os.mkdir(INPUT_DIR + GSDIR)
-    if os.path.isfile(INPUT_DIR + GSDIR + sample_group_name + '.txt') is False:
+    if os.path.isfile(INPUT_DIR + sample_group_name + '.txt') is False:
         mk_init_file_list(INPUT_DIR, PROCESSED_BAM, sample_group_name)
     
     # 한줄씩 읽어서 input_path_list에 넣기 

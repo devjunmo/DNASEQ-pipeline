@@ -32,7 +32,7 @@ source activate gatk4
 
 case "$5" in
     WGS)
-        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" SelectVariants \
+        gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms50G -Xmx50G" SelectVariants \
             -R $refGenome \
             -V $input_vcf \
             -select-type $type \

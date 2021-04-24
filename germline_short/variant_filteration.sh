@@ -19,7 +19,7 @@ case "$type" in
     SNP)
         case "$4" in
             WGS)
-                gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" VariantFiltration \
+                gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms30G -Xmx30G" VariantFiltration \
                     -V $input_vcf \
                     -filter "QD < 2.0" --filter-name "QD2" \
                     -filter "QUAL < 30.0" --filter-name "QUAL30" \
@@ -53,7 +53,7 @@ case "$type" in
     INDEL)
         case "$4" in
             WGS)
-                gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" VariantFiltration \
+                gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms30G -Xmx30G" VariantFiltration \
                     -V $input_vcf \
                     -filter "QD < 2.0" --filter-name "QD2" \
                     -filter "QUAL < 30.0" --filter-name "QUAL30" \
