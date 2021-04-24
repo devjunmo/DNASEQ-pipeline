@@ -13,7 +13,7 @@ patterned=2500
 
 
 source activate gatk4
-    gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" MarkDuplicates \
+    gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms30G -Xmx30G" MarkDuplicates \
         -I $input \
         -O $output \
         --METRICS_FILE $4marked_dup_metrics.txt \
