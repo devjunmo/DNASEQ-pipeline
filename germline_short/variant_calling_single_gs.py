@@ -125,8 +125,8 @@ if gs_work_type == 'hard':
     snp_vcf = GS_DIR + snp_type + '_' + raw_vcf
     indel_vcf = GS_DIR + indel_type + '_' + raw_vcf
 
-    snp_hardFiltered_output = GS_DIR + hardFilterd_prefix + snp_type + '_' + READ_NAME + '.vcf'
-    indel_hardFiltered_output = GS_DIR + hardFilterd_prefix + indel_type + '_' + READ_NAME + '.vcf'
+    snp_hardFiltered_output = GS_DIR + hardFilterd_prefix + snp_type + '_' + raw_vcf
+    indel_hardFiltered_output = GS_DIR + hardFilterd_prefix + indel_type + '_' + raw_vcf
     
 
 
@@ -246,7 +246,7 @@ if gs_work_type == 'ft':
         try:
             mapping_time = time.time()
             err_msg = f'An_error_occurred_in_consolidating_gvcfs.sh:_Consolidating_GVCF_files_was_failed.'
-            sp.check_call(fr'sh germline_short/funcotator.sh {}', shell=True)
+            # sp.check_call(fr'sh germline_short/funcotator.sh {}', shell=True)
             break
 
         except sp.CalledProcessError as e:
