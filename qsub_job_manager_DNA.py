@@ -19,7 +19,14 @@ seq_type = "WES"
 
 # qsub 사용 여부
 is_using_qsub = True
+qsub_type = "conf" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동지정)
 qsub_config_name = r'/home/jun9485/src/qsub.5'
+## man인 경우
+pbs_N = "DNA.pp"
+pbs_o = "/data_244/src/WGS_PBS/"
+pbs_j = "oe"
+pbs_l_core = 2
+
 
 # 큐섭 사용 안하고 시퀀셜하게 진행할때
 flow_sleep_time = 6000 # 초단위 
@@ -101,7 +108,11 @@ if WORKING_TYPE == "pp":
             prefix = INPUT_DIR + read_name
 
             if is_using_qsub is True:
-                sp.call(f'qsub {qsub_config_name} python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                if qsub_type == "config":
+                    sp.call(f'qsub {qsub_config_name} python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                elif qsub_type == "man":
+                    sp.call(f'echo "python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}" | qsub \
+                        -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
             elif is_using_qsub is False:
                 if max_parallel_num == 1:
                     sp.call(f'python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
