@@ -132,7 +132,7 @@ elif WORKING_TYPE == "gs":
     if os.path.isdir(INPUT_DIR + GSDIR) is False:
         os.mkdir(INPUT_DIR + GSDIR)
     if os.path.isfile(INPUT_DIR + sample_group_name + '.txt') is False:
-        mk_init_file_list(INPUT_DIR, PROCESSED_BAM, sample_group_name)
+        mk_init_file_list(INPUT_DIR, PROCESSED_BAM, sample_group_name) # recal_bam list 만들기 
     
     # 한줄씩 읽어서 input_path_list에 넣기 
     f = open(rf'{INPUT_DIR}{sample_group_name}.txt', 'r')
@@ -149,7 +149,7 @@ elif WORKING_TYPE == "gs":
 
     OUTPUT_GS_DIR = INPUT_DIR + GSDIR
 
-    if is_single_unit_processing is True:
+    if is_single_unit_processing is True: # 싱글 샘플 단위 진행
         haplotype_caller_mode = 'single'
         for i in range(path_len):
             process = round(i/path_len, 2) * 100
@@ -159,12 +159,15 @@ elif WORKING_TYPE == "gs":
             # sample: recal_deduped_sorted_hiPS36-C.bam
             read_name = bam_file.split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
             
-
             output_raw_vcf = OUTPUT_GS_DIR + read_name + '.vcf.gz'
             output_prefix = OUTPUT_GS_DIR + read_name
 
             if is_using_qsub is True:
-                sp.call(f'qsub {qsub_config_name} python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                if qsub_type == "config":
+                    sp.call(f'qsub {qsub_config_name} python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
+                elif qsub_type == "man":
+                    sp.call(f'echo "python3 {SRC_DIR}germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}" | qsub \
+                        -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
             elif is_using_qsub is False:
                 if max_parallel_num == 1:
                     sp.call(f'python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
