@@ -11,13 +11,15 @@ import os
 ####################### hyper parameters ####################################################
 # 디버깅모드시 실행파일은 주석처리, 중간생성물 지우기 여부는 False처리, max_looping=1 처리!!
 
-max_looping = 1
+max_looping = 0
 
 script_dir = 'pass'
 
 ## WORK TYPE ##
-## case 1. Hardfiltering ~ vcf2maf (hard)
-## case 2. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / 
+## case 1. haplotypeCaller ~ vcf2maf (hard)
+## case 2. filter된 cnn scored vcf를 indel과 snp로 나눌때 (spcnn)
+## case 3. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / -> 사용 x
+
 gs_work_type = 'ft'
 
 CNN_model = '2D'
@@ -196,7 +198,45 @@ if gs_work_type == 'hard':
                 exit(0)
 
 
+if gs_work_type == 'spcnn':
 
+    filtered_scored_vcf_name = 'filtered_scored_' + READ_NAME + '.vcf.gz'
+    filtered_scored_vcf_path = GS_DIR + filtered_scored_vcf_name
+
+    snp_type = 'SNP'
+    indel_type = 'INDEL'
+
+    snp_vcf = GS_DIR + snp_type + '_' + 'cnn_' + READ_NAME + '.vcf.gz'
+    indel_vcf = GS_DIR + indel_type + '_' + 'cnn_' + READ_NAME + '.vcf.gz'
+
+
+    # SelectVariants - snps
+    loop_count = 0
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_SNP_vcf_file_was_failed.'
+            sp.check_call(fr'sh germline_short/select_variants.sh {REF_GENOME_PATH} {filtered_scored_vcf_path} {snp_vcf} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
+    
+    # SelectVariants - indels
+    loop_count = 0
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_INDEL_vcf_file_was_failed.'
+            sp.check_call(fr'sh germline_short/select_variants.sh {REF_GENOME_PATH} {filtered_scored_vcf_path} {indel_vcf} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
 
 
 
