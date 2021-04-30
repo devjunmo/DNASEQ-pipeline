@@ -14,6 +14,7 @@ import os
 
 THREADS = 14                                        
 REF_GENOME_DIR = '/home/jun9485/data/refGenome/b37/'
+script_dir = 'pass'
 
  # 중간 생성물 지우기 여부
 rm_sam = True
@@ -26,6 +27,8 @@ sorting_order = 'coordinate' # or queryname
 max_looping = 1
 
 ##############################################################################################
+
+# os.chdir(script_dir) # 문제 발생시 넣는 코드
 
 read1 = ''
 read2 = ''

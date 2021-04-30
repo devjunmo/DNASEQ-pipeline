@@ -13,6 +13,8 @@ import os
 
 max_looping = 1
 
+script_dir = 'pass'
+
 ## WORK TYPE ##
 ## case 1. Hardfiltering ~ vcf2maf (hard)
 ## case 2. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / 
@@ -25,6 +27,8 @@ REF_DIR = r'/home/jun9485/data/refGenome/b37/'
 data_source_dir = r'/home/jun9485/data/funcotator_data_source/funcotator_dataSources.v1.7.20200521g'
 
 ##############################################################################################
+
+# os.chdir(script_dir) # 문제 발생시 넣는 코드
 
 BAM_FILE = ''
 READ_NAME = ''

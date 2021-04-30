@@ -112,7 +112,7 @@ if WORKING_TYPE == "pp":
                 if qsub_type == "config":
                     sp.call(f'qsub {qsub_config_name} python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
                 elif qsub_type == "man":
-                    sp.call(f'echo "python {SRC_DIR}preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}" | qsub \
+                    sp.call(f'echo "python3 {SRC_DIR}preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}" | qsub \
                         -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
             elif is_using_qsub is False:
                 if max_parallel_num == 1:
