@@ -22,25 +22,23 @@ fi
 
 # "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx30G"
 
+source activate gatk4
+
 case "$5" in
     WGS)
         case "$6" in
             gvcf)
-                source activate gatk4
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx50G" HaplotypeCaller \
                     -R $ref_genome \
                     -O $output \
                     -I $inputBam \
                     -ERC GVCF
-                conda deactivate
             ;;
             single)
-                source activate gatk4
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx50G" HaplotypeCaller \
                     -R $ref_genome \
                     -O $output \
                     -I $inputBam
-                conda deactivate
             ;;
             *)
                 echo "mode를 확인하시오 gvcf or single 입력"
@@ -51,23 +49,19 @@ case "$5" in
     WES)
         case "$6" in
             gvcf)
-                source activate gatk4
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx20G" HaplotypeCaller \
                     -R $ref_genome \
                     -O $output \
                     -I $inputBam \
                     -L $interval \
                     -ERC GVCF
-                conda deactivate
             ;;
             single)
-                source activate gatk4
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx20G" HaplotypeCaller \
                     -R $ref_genome \
                     -O $output \
                     -I $inputBam \
                     -L $interval
-                conda deactivate
             ;;
             *)
                 echo "mode를 확인하시오 gvcf or single 입력"
@@ -80,3 +74,6 @@ case "$5" in
         exit 1
     ;;
 esac
+
+
+conda deactivate
