@@ -21,6 +21,7 @@ seq_type = "WES"
 is_using_qsub = True
 qsub_type = "conf" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동지정)
 qsub_config_name = r'/home/jun9485/src/qsub.5'
+
 ## man인 경우
 pbs_N = "DNA.pp"
 pbs_o = "/data_244/src/WGS_PBS/"
@@ -109,7 +110,7 @@ if WORKING_TYPE == "pp":
             prefix = INPUT_DIR + read_name
 
             if is_using_qsub is True:
-                if qsub_type == "config":
+                if qsub_type == "conf":
                     sp.call(f'qsub {qsub_config_name} python preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
                 elif qsub_type == "man":
                     sp.call(f'echo "python3 {SRC_DIR}preprocessing/preprocessing_DNA.py -a {read1} -b {read2} -n {read_name} -p {prefix} -i {INPUT_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}" | qsub \
@@ -163,7 +164,7 @@ elif WORKING_TYPE == "gs":
             output_prefix = OUTPUT_GS_DIR + read_name
 
             if is_using_qsub is True:
-                if qsub_type == "config":
+                if qsub_type == "conf":
                     sp.call(f'qsub {qsub_config_name} python germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type} &', shell=True)
                 elif qsub_type == "man":
                     sp.call(f'echo "python3 {SRC_DIR}germline_short/variant_calling_single_gs.py -b {bam_file} -n {read_name} -G {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}" | qsub \
