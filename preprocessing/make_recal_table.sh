@@ -18,10 +18,10 @@ ks_dbSNP=$ref_dir"dbsnp_138.b37.vcf"
 ks_mills=$ref_dir"Mills_and_1000G_gold_standard.indels.b37.vcf"
 ks_1000G=$ref_dir"1000G_phase1.indels.b37.vcf"
 
+source activate gatk4
 
 case "$5" in
     "WES")
-        source activate gatk4
         gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" BaseRecalibrator \
             -I $input \
             -O $output \
@@ -31,10 +31,8 @@ case "$5" in
             -R $ref_genome \
             --use-original-qualities \
             -L $interval
-        conda deactivate
     ;;
     "WGS")
-        source activate gatk4
         gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" BaseRecalibrator \
             -I $input \
             -O $output \
@@ -43,7 +41,6 @@ case "$5" in
             --known-sites $ks_1000G \
             -R $ref_genome \
             --use-original-qualities
-        conda deactivate
     ;;
     *)
         echo "seqType = WES or WGS"

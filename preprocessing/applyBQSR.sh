@@ -14,10 +14,10 @@ ref_genome=$4
 
 interval=$6
 
+source activate gatk4
 
 case "$5" in
     "WES")
-        source activate gatk4
         gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" ApplyBQSR \
             -I $inputBam \
             -O $outputBam \
@@ -28,10 +28,8 @@ case "$5" in
             --static-quantized-quals 10 --static-quantized-quals 20 --static-quantized-quals 30 \
             --add-output-sam-program-record \
             --create-output-bam-md5
-        conda deactivate
     ;;
     "WGS")
-        source activate gatk4
         gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" ApplyBQSR \
             -I $inputBam \
             -O $outputBam \
@@ -41,7 +39,6 @@ case "$5" in
             --static-quantized-quals 10 --static-quantized-quals 20 --static-quantized-quals 30 \
             --add-output-sam-program-record \
             --create-output-bam-md5
-        conda deactivate
     ;;
     *)
         echo "seqType = WES or WGS"

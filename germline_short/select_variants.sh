@@ -52,4 +52,4 @@ case "$5" in
     ;;
 esac
 
-conda deactivate
+# conda deactivate

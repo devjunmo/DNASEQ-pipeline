@@ -83,4 +83,4 @@ case "$type" in
     ;;
 esac
 
-conda deactivate
+# conda deactivate
