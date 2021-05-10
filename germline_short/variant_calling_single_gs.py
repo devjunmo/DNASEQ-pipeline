@@ -19,8 +19,9 @@ script_dir = 'pass'
 ## case 1. haplotypeCaller ~ vcf2maf (hard)
 ## case 2. filter된 cnn scored vcf를 indel과 snp로 나눌때 (spcnn)
 ## case 3. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / -> 사용 x
+## case 4. hard filter된 vcf를 CNNVariantScore ~ FilterVariantTranches까지 진행할 때 (hardcnn)
 
-gs_work_type = 'ft'
+gs_work_type = 'hardcnn'
 
 CNN_model = '2D'
 
@@ -262,6 +263,53 @@ output_scored_vcf = GS_DIR + scored_prefix + READ_NAME + '.vcf'
 
 filterd_prefix = 'filtered_'
 output_filtered_scored_vcf = GS_DIR + filterd_prefix + scored_prefix + READ_NAME + '.vcf'
+
+
+
+if gs_work_type == 'hardcnn':
+
+    VCF_SFX = '.vcf.gz'
+
+    # snp
+
+    HARD_PFX_SNP = 'hardFiltered_SNP_'
+    
+    input_hard_vcf_path_snp = GS_DIR + HARD_PFX_SNP + READ_NAME + VCF_SFX
+
+    b_name = BAM_FILE.split(r'/')[-1].split(r'.')[0].split(r'_')[-1]
+    v_name = input_hard_vcf_path_snp.split(r'/')[-1].split(r'.')[-3].split(r'_')[-1]
+
+    if b_name != v_name:
+        print('BAMfile, VCFfile do not matched.')
+        exit(1)
+    
+    scored_prefix = 'scored_'
+    scored_hard_vcf_path_snp = GS_DIR + scored_prefix + HARD_PFX_SNP + READ_NAME + VCF_SFX
+
+    # CNNScoreVariants 실행
+    sp.call(f'sh germline_short/cnn_score_variants.sh {BAM_FILE} {input_hard_vcf_path_snp} {REF_GENOME_PATH} {scored_hard_vcf_path_snp} {INTERVAL_FILE_PATH} {CNN_model} {seq_type}', shell=True)
+
+    filter_prefix = 'cnnFiltered_'
+    cnn_filtered_path_snp = GS_DIR + filter_prefix + scored_prefix + HARD_PFX_SNP + READ_NAME + VCF_SFX
+
+    # FilterVariantTranches 실행
+    sp.call(f'sh germline_short/filter_variant_tranches.sh {scored_hard_vcf_path_snp} {cnn_filtered_path_snp} {INTERVAL_FILE_PATH} {CNN_model} {seq_type}', shell=True)
+
+
+    # indel
+    HARD_PFX_INDEL = 'hardFiltered_INDEL_'
+
+    input_hard_vcf_path_indel = GS_DIR + HARD_PFX_INDEL + READ_NAME + VCF_SFX
+    scored_hard_vcf_path_indel = GS_DIR + scored_prefix + HARD_PFX_INDEL + READ_NAME + VCF_SFX
+
+    # CNNScoreVariants 실행
+    sp.call(f'sh germline_short/cnn_score_variants.sh {BAM_FILE} {input_hard_vcf_path_indel} {REF_GENOME_PATH} {scored_hard_vcf_path_indel} {INTERVAL_FILE_PATH} {CNN_model} {seq_type}', shell=True)
+    
+    cnn_filtered_path_indel = GS_DIR + filter_prefix + scored_prefix + HARD_PFX_INDEL + READ_NAME + VCF_SFX
+    
+    # FilterVariantTranches 실행
+    sp.call(f'sh germline_short/filter_variant_tranches.sh {scored_hard_vcf_path_indel} {cnn_filtered_path_indel} {INTERVAL_FILE_PATH} {CNN_model} {seq_type}', shell=True)
+
 
 
 
