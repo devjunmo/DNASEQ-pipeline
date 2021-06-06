@@ -5,7 +5,7 @@ import subprocess as sp
 
 input_dir = r'/data_240/WES/teratoma_annotation/teratoma_sample/'
 input_format = r'hardFiltered_*_Teratoma*.vcf'
-output_dir_name = r'teratoma_pass_vcf/'
+output_dir_name = r'maf/'
 tmp_dir = input_dir + 'vcf/'
 fasta_path = r'/data_240/refGenome/b37/human_g1k_v37.fasta'
 
