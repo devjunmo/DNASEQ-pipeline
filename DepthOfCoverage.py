@@ -11,17 +11,17 @@ from glob import glob
 # input_bam_list_file = input_dir + 'bam_list.txt'
 # interval_file = r'/data_244/refGenome/b37/SureSelect_v6_processed.bed'
 
-input_dir = r'/home/jun9485/data/WGS/HN00146173/recal_bam/'
-input_format = r'recal_*.bam'
-ref_genome = r'/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta'
+input_dir = r'/data_244/WGS/HN00146173/recal_bam/'
+input_format = r'*.bam'
+ref_genome = r'/data_244/refGenome/b37/human_g1k_v37.fasta'
 output_dir_name = 'DOC_results'
 # output_path = input_dir + 'sample.doc1'
 # input_bam_list_file = input_dir + 'bam_list.txt'
 
-wgs_interval_file = r'/home/jun9485/data/refGenome/b37/wgs_calling_regions.v1.list'
-wes_interval_file = r'/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.bed'
+wgs_interval_file = r'/data_244/refGenome/b37/wgs_calling_regions.v1.list'
+wes_interval_file = r'/data_244/refGenome/b37/SureSelect_v6_processed.bed'
 
-qsub_type = 'seq' # 'pbs_pro' (최신, docker) / 'pbs_old' (240서버) / seq (큐섭 사용 x)
+qsub_type = 'pbs_pro' # 'pbs_pro' (최신, docker) / 'pbs_old' (240서버) / seq (큐섭 사용 x)
 
 seq_type = 'WGS'
 
@@ -35,10 +35,13 @@ else:
 
 
 ####### pbs_pro config ###########
-pbs_N = "mk_maf.WES"
+pbs_N = "WGS.DOC.244"
 pbs_o = input_dir + "qsub_log/"
 pbs_j = "oe"
-pbs_l_core = 4
+pbs_l_core = 2
+
+if os.path.isdir(pbs_o) is False:
+    os.mkdir(pbs_o)
 ##################################
 
 ####### pbs_old config ###########
