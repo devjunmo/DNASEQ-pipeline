@@ -3,23 +3,15 @@ import glob
 import natsort
 import time
 from time import sleep
-import os
 
 
 # qsub 사용하지 않고 순차적으로 돌리는 코드
 
-INPUT_DIR = r'/home/jun9485/data/utuc/'
-OUTPUT_DIR_NAME = r'fastqc/'
-
-
+INPUT_DIR = r'/home/jun9485/data/WGS/HN00146173_hdd1/'
+OUTPUT_DIR = r'/home/jun9485/data/WGS/fastqc/'
 RAW_READS = r'*.fastq.gz'  
 thread = 4
 file_type = 'fastq'
-
-OUTPUT_DIR = INPUT_DIR + OUTPUT_DIR_NAME
-
-if os.path.isdir(OUTPUT_DIR) is False:
-    os.mkdir(OUTPUT_DIR)
 
 
 input_path_list = glob.glob(INPUT_DIR + RAW_READS)    
@@ -29,7 +21,7 @@ path_len = len(input_path_list)
 print('QC할 paired end reads의 총 수 =', path_len, '\n')
 print(input_path_list)
 
-# exit(0)
+exit(0)
 
 for i in range(path_len):
     print(f'{input_path_list[i]} preprocessing...')
@@ -40,6 +32,5 @@ for i in range(path_len):
 
     # fastqc -o ~/data/WGS/fastqc/ -f fastq -t 4 Teratoma-17_R1.fastq.gz
     sp.call(f'sh fastqc -o {OUTPUT_DIR} -f {file_type} -t {thread} {read}', shell=True)
-    print('hi')
     sleep(1800)
 
