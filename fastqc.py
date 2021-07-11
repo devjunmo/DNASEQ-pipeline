@@ -13,7 +13,7 @@ OUTPUT_DIR_NAME = r'fastqc/'
 
 
 RAW_READS = r'*.fastq.gz'  
-thread = 4
+thread = 6
 file_type = 'fastq'
 
 OUTPUT_DIR = INPUT_DIR + OUTPUT_DIR_NAME
@@ -39,7 +39,5 @@ for i in range(path_len):
     read = input_path_list[i]
 
     # fastqc -o ~/data/WGS/fastqc/ -f fastq -t 4 Teratoma-17_R1.fastq.gz
-    sp.call(f'sh fastqc -o {OUTPUT_DIR} -f {file_type} -t {thread} {read}', shell=True)
-    print('hi')
-    sleep(1800)
+    sp.call(f'fastqc -o {OUTPUT_DIR} -f {file_type} -t {thread} {read}', shell=True)
 
