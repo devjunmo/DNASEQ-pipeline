@@ -5,29 +5,32 @@ import time
 from time import sleep
 import os
 
+print(os.getcwd())
+
 # script형태의 python 파일
 # 사용시 hyper parameters에 해당하는 부분 유동적으로 수정
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'HN00144124_gs' # pp일때는 안붙였어서 구분자 목적으로 언더바
+sample_group_name = 'utuc.1.pp' # pp일때는 안붙였어서 구분자 목적으로 언더바
 is_making_input_list = True
 
-REF_GENOME_PATH = '/home/jun9485/data/refGenome/b37/human_g1k_v37.fasta' 
-INTERVAL_FILE_PATH = '/home/jun9485/data/refGenome/b37/SureSelect_v6_processed.bed'
+REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
+INTERVAL_FILE_PATH = '/data_244/refGenome/b37/SureSelect_v6_processed.bed'
 seq_type = "WES"
 
 # qsub 사용 여부
 is_using_qsub = True
-qsub_type = "conf" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동지정)
+qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동지정)
+
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "DNA.pp"
-pbs_o = "/data_244/src/WGS_PBS/"
+pbs_N = "utuc.DNA.pp"
+pbs_o = "/data_244/utuc/pbs_out/"
 pbs_j = "oe"
-pbs_l_core = 2
-SRC_DIR = r"/data_244/src/WGS_PBS/DNASEQ-pipeline/"
+pbs_l_core = 4
+SRC_DIR = r"/data_244/src/utuc_pp/DNASEQ-pipeline/"
 
 
 # 큐섭 사용 안하고 시퀀셜하게 진행할때
@@ -42,7 +45,7 @@ WORKING_TYPE = "pp"
 qc_output_path = 'pass'
 
 # Data pre-processing for variant discovery           
-INPUT_DIR = r'/home/jun9485/data/WES/HN00144124/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/utuc/'   # 이 디렉토리에 계속 생성시킬것
 RAW_READS = r'*.fastq.gz'                                                         
 
 # Germline short variant discovery (SNPs + Indels)

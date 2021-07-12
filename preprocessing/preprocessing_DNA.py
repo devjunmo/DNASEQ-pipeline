@@ -7,28 +7,31 @@ import getopt
 import os
 
 
+
 ####################### hyper parameters ####################################################
 # 디버깅모드시 실행파일은 주석처리, 중간생성물 지우기 여부는 False처리, max_looping=1 처리!!
 
 # !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
 
-THREADS = 14                                        
-REF_GENOME_DIR = '/home/jun9485/data/refGenome/b37/'
-script_dir = 'pass'
+THREADS = 3                                        
+REF_GENOME_DIR = '/data_244/refGenome/b37/'
+script_dir = '/data_244/src/utuc_pp/DNASEQ-pipeline/preprocessing/'
 
  # 중간 생성물 지우기 여부
 rm_sam = True
 rm_raw_bam = True
-rm_sorted_bam = True
+rm_sorted_bam = False
 rm_dedup_sorted_bam = True
 
 sorting_order = 'coordinate' # or queryname
 
 max_looping = 1
 
+os.chdir(script_dir) # 문제 발생시 넣는 코드
+
 ##############################################################################################
 
-# os.chdir(script_dir) # 문제 발생시 넣는 코드
+
 
 read1 = ''
 read2 = ''
@@ -104,11 +107,13 @@ while True:
     try:
         mapping_time = time.time()
         err_msg = f'An_error_occurred_in_mappingBwaPE.sh:_Mapping_reads_was_failed.{read_name}'
-        sp.check_call(fr'sh preprocessing/mappingBwaPE.sh {read1} {read2} {output_sam} {THREADS} {REF_GENOME_PATH} {read_name}', shell=True)
+        print('hi')
+        print(os.getcwd())  
+        sp.check_call(fr'sh ./mappingBwaPE.sh {read1} {read2} {output_sam} {THREADS} {REF_GENOME_PATH} {read_name}', shell=True)
         break
 
     except sp.CalledProcessError as e:
-        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
@@ -124,12 +129,12 @@ while True:
     try:
         s2b_time = time.time()
         err_msg = f'An_error_occurred_in_sam2bam.sh:_Converting_SAM_to_BAM_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/sam2bam.sh {output_sam} {output_bam} {THREADS}', shell=True)
+        sp.check_call(fr'sh ./sam2bam.sh {output_sam} {output_bam} {THREADS}', shell=True)
         rm_file(rm_sam, output_sam) # sam 삭제 여부
         break
 
     except sp.CalledProcessError as e:
-        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
@@ -146,16 +151,16 @@ while True:
     try:
         sorting_time = time.time()
         err_msg = f'An_error_occurred_in_sortingBam.sh:_Sorting_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/sortingBam.sh {output_bam} {sorted_bam} {THREADS} {read_name}', shell=True)
+        sp.check_call(fr'sh ./sortingBam.sh {output_bam} {sorted_bam} {THREADS} {read_name}', shell=True)
         break
 
     except sp.CalledProcessError as e:
-        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
 
-exit(0)
+# exit(0)
 
 
 # dedup bam
@@ -169,12 +174,12 @@ while True:
     try:
         dedup_time = time.time()
         err_msg = f'An_error_occurred_in_deduplicateBam.sh:_Deduplicating_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/deduplicateBam.sh {sorted_bam} {dedup_sorted_bam} {sorting_order} {metric_prefix}', shell=True)
+        sp.check_call(fr'sh ./deduplicateBam.sh {sorted_bam} {dedup_sorted_bam} {sorting_order} {metric_prefix}', shell=True)
         rm_file(rm_sorted_bam, sorted_bam) # sorted bam 삭제
         break
 
     except sp.CalledProcessError as e:
-        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
@@ -189,12 +194,12 @@ while True:
     try:
         dedup_time = time.time()
         err_msg = f'An_error_occurred_in_indexing_dedup_bam.sh:_Indexing_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/indexing_dedup_bam.sh {THREADS} {dedup_sorted_bam}', shell=True)
+        sp.check_call(fr'sh ./indexing_dedup_bam.sh {THREADS} {dedup_sorted_bam}', shell=True)
         rm_file(rm_raw_bam, output_bam) # raw bam 삭제
         break
 
     except sp.CalledProcessError as e:
-        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
@@ -211,11 +216,11 @@ while True:
     try:
         mk_table_time = time.time()
         err_msg = f'An_error_occurred_in_make_recal_table.sh:_Making_a_recal.table_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {REF_GENOME_DIR} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+        sp.check_call(fr'sh ./make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {REF_GENOME_DIR} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
         break
 
     except sp.CalledProcessError as e:
-        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
@@ -233,12 +238,12 @@ while True:
     try:
         mk_table_time = time.time()
         err_msg = f'An_error_occurred_in_applyBQSR.sh:_Applying_the_recalTable_to_the_BAM_file_was_failed._{read_name}'
-        sp.check_call(fr'sh preprocessing/applyBQSR.sh {dedup_sorted_bam} {recal_dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+        sp.check_call(fr'sh ./applyBQSR.sh {dedup_sorted_bam} {recal_dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
         rm_file(rm_dedup_sorted_bam, dedup_sorted_bam)
         break
 
     except sp.CalledProcessError as e:
-        sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+        sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
         loop_count += 1
         if loop_count > max_looping:
             exit(0)
