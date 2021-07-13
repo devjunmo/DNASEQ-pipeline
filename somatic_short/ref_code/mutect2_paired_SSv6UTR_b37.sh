@@ -54,23 +54,30 @@ gatk Mutect2\
 	-O ${output}.mutect.vcf\
 	--f1r2-tar-gz ${output}.f1r2.tar.gz\
 	--panel-of-normals $PON
-	
+
+
+# 필터링 재료
 gatk LearnReadOrientationModel\
 	-I ${output}.f1r2.tar.gz\
 	-O ${output}.rom.tar.gz
 
+
+# 컨탐 계산 재료
 gatk GetPileupSummaries \
 	-I $tumor \
 	-V $sec \
 	-L $sec \
 	-O ${output}.getpileupsummaries.table
 
+
+# 필터링 재료
 gatk CalculateContamination \
 	-I ${output}.getpileupsummaries.table \
 	-tumor-segmentation ${output}.segments.table \
 	-O ${output}.calculatecontamination.table
 
 
+# 필터링 과정
 gatk FilterMutectCalls\
 	-V ${output}.mutect.vcf \
 	-R $ref\

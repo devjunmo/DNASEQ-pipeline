@@ -12,7 +12,7 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'utuc.1.pp' # pp일때는 안붙였어서 구분자 목적으로 언더바
+sample_group_name = 'utuc.normal.pp' # pp일때는 안붙였어서 구분자 목적으로 언더바
 is_making_input_list = True
 
 REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
@@ -26,11 +26,15 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "utuc.DNA.pp"
-pbs_o = "/data_244/utuc/pbs_out/"
+pbs_N = "utuc.normal.DNA.pp"
+pbs_o = "/data_244/utuc_normal/pbs_out/"
 pbs_j = "oe"
-pbs_l_core = 4
+pbs_l_core = 2
 SRC_DIR = r"/data_244/src/utuc_pp/DNASEQ-pipeline/"
+
+if os.path.isdir(pbs_o) is False:
+    os.mkdir(pbs_o)
+
 
 
 # 큐섭 사용 안하고 시퀀셜하게 진행할때
@@ -45,7 +49,7 @@ WORKING_TYPE = "pp"
 qc_output_path = 'pass'
 
 # Data pre-processing for variant discovery           
-INPUT_DIR = r'/data_244/utuc/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/utuc_normal/'   # 이 디렉토리에 계속 생성시킬것
 RAW_READS = r'*.fastq.gz'                                                         
 
 # Germline short variant discovery (SNPs + Indels)
