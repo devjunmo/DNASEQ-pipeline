@@ -1,7 +1,4 @@
 import subprocess as sp
-import glob
-import natsort
-import time
 import sys
 import getopt
 import os
@@ -12,8 +9,8 @@ import os
 
 # script_dir = '/data_244/src/utuc_pp/DNASEQ-pipeline/preprocessing/'
 
-
-# os.chdir(script_dir) # 문제 발생시 넣는 코드
+SRC_DIR = r"/data_244/src/utuc_pp/DNASEQ-pipeline/somatic_short/"
+os.chdir(SRC_DIR) # 문제 발생시 넣는 코드
 
 ##############################################################################################
 
@@ -85,7 +82,7 @@ def main(argv):
         elif opt in ("-y", "--seqType"):
             seq_type = arg
         elif opt in ("-O", "--outputDir"):
-            seq_type = arg
+            OUTPUT_DIR = arg
 
 main(sys.argv)
 
