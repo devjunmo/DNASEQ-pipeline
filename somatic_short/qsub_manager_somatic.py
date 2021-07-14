@@ -11,7 +11,8 @@ seq_type = 'WES'
 input_dir = r'/data_244/utuc/'
 input_format = r'recal_*.bam'
 
-output_dir = input_dir + r'somatic_call/'
+# output_dir = input_dir + r'somatic_call/'
+output_dir = input_dir + r'somatic_call_SID/'
 
 ref_dir = r'/data_244/refGenome/b37/'
 
@@ -25,6 +26,16 @@ interval_path = ref_dir + r'SureSelect_v6_processed.bed'
 
 pair_info = r'/data_244/utuc/utuc_NT_pair.csv'
 
+run_type = 'SID' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector)
+
+
+java7_path = r'/usr/lib/jvm/java-1.7.0/bin/java'
+mutect1_path = r'/home/pbsuser/mutect1/mutect-1.1.7.jar'
+gatk_legacy_path = r'/home/pbsuser/LagacyGATK/GenomeAnalysisTK.jar'
+
+dbsnp_path = ref_dir + r'dbsnp_138.b37.vcf'
+cosmic_path = ref_dir + r'cosmic_v54_120711.b37.vcf'
+
 
 if os.path.isdir(output_dir) is False:
     os.mkdir(output_dir)
@@ -32,10 +43,10 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "utuc.DNA.somatic"
+pbs_N = "utuc.mutect2.2"
 pbs_o = output_dir + r"pbs_out/"
 pbs_j = "oe"
-pbs_l_core = 3
+pbs_l_core = 2
 SRC_DIR = r"/data_244/src/utuc_pp/DNASEQ-pipeline/somatic_short/"
 
 if os.path.isdir(pbs_o) is False:
@@ -69,10 +80,25 @@ for i in range(len(input_lst)):
 
     try:
         target_normal_name = pair_dict[t_name]['Normal']
+        normal_bam = input_dir + 'recal_deduped_sorted_' + target_normal_name + '.bam'
         # pair_dict[f_name]['Tumor_Grade']
-        sp.call(f'echo "python {SRC_DIR}run_mutect2.py -n {target_normal_name} -t {t_name} -I {input_dir} -R {ref_genome_path} -L {interval_path} -y {seq_type} \
-                                        -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
-                                        -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+
+        if run_type == 'MT2':
+            sp.call(f'echo "python {SRC_DIR}run_mutect2.py -n {target_normal_name} -t {t_name} -I {input_dir} -R {ref_genome_path} -L {interval_path} -y {seq_type} \
+                                            -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
+                                            -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+        elif run_type == 'MT1':
+            out_txt_path = output_dir + t_name + '.mutect1.txt'
+            out_vcf_path = output_dir + t_name + '.mutect1.vcf'
+            sp.call(f'echo "sh {SRC_DIR}mutect1.sh {input_bam} {normal_bam} {ref_genome_path} {interval_path} {PON_path} \
+                                                    {out_txt_path} {out_vcf_path} {dbsnp_path} {cosmic_path} {seq_type} {java7_path} {mutect1_path}" | qsub \
+                                                    -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+
+        elif run_type == 'SID':
+            out_vcf_path = output_dir + t_name + '.somaticindelocator.vcf'
+            sp.call(f'echo "sh {SRC_DIR}somaticIndelDetector.sh {input_bam} {normal_bam} {ref_genome_path} {interval_path} {PON_path} \
+                                                    {out_vcf_path} {dbsnp_path} {cosmic_path} {seq_type} {java7_path} {gatk_legacy_path}" | qsub \
+                                                    -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
 
     except KeyError as e:
         print(f'{t_name} does not have target normal sample')

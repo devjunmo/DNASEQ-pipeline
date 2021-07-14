@@ -112,7 +112,7 @@ sp.call(rf'sh ./learnReadOrientationModel.sh {in_f1r2} {out_rom}', shell = True)
 
 # GetPileupSummaries
 
-out_gp_table = output_prefix + r'.getpileupsummaries.table path'
+out_gp_table = output_prefix + r'.getpileupsummaries.table'
 
 sp.call(rf'sh ./getPileupSummaries.sh {tumor_bam} {SEC_PATH} {out_gp_table}', shell=True)
 
