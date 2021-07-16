@@ -7,8 +7,8 @@ import subprocess as sp
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/utuc/'
-input_format = r'recal_*.bam'
+input_dir = r'/data_244/utuc/somatic_call_mutect1/filtered_vcf/'
+input_format = r'*.vcf.gz'
 
 
 ref_dir = r'/data_244/refGenome/b37/'
@@ -17,7 +17,8 @@ ref_genome_path = ref_dir + 'human_g1k_v37.fasta'
 
 interval_path = ref_dir + r'SureSelect_v6_processed.bed'
 
-select_type = 'SNP' # INDEL
+# select_type = 'SNP'
+select_type = 'INDEL' 
 
 snp_out_dir_name = r'snp/'
 indel_out_dir_name = r'indel/'
@@ -37,11 +38,11 @@ if os.path.isdir(indel_out_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "utuc.mutect2.selectV"
+pbs_N = "utuc.mutect2.select.V"
 pbs_o = input_dir + r"pbs_out/"
 pbs_j = "oe"
 pbs_l_core = 2
-SRC_DIR = r"/data_244/src/utuc_select_v/DNASEQ-pipeline/somatic_short/"
+SRC_DIR = r"/data_244/src/utuc_select_v/DNASEQ-pipeline/"
 
 if os.path.isdir(pbs_o) is False:
     os.mkdir(pbs_o)
@@ -50,7 +51,7 @@ if os.path.isdir(pbs_o) is False:
 
 
 
-os.chdir(SRC_DIR)
+# os.chdir(SRC_DIR)
 
 
 input_lst = glob(input_dir + input_format)
@@ -67,9 +68,9 @@ for i in range(len(input_lst)):
 
     if select_type == 'SNP':
 
-        output_path_snp = snp_out_dir + 'SNP' + '_' + 'filtered' + '_' + f_name + '.vcf'
+        output_path_snp = snp_out_dir + 'SNP' + '_' + 'filtered' + '_' + f_name + '.vcf.gz'
 
-        sp.call(rf'echo "sh ../germline_short/select_variants.sh {ref_genome_path} {input_vcf} {output_path_snp} \
+        sp.call(rf'echo "sh {SRC_DIR}germline_short/select_variants.sh {ref_genome_path} {input_vcf} {output_path_snp} \
                 {select_type} {seq_type} {interval_path}" | qsub \
                 -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
 
@@ -79,9 +80,9 @@ for i in range(len(input_lst)):
 
     if select_type == 'INDEL':
     
-        output_path_indel = indel_out_dir + 'INDEL' + '_' + 'filtered' + '_' + f_name + '.vcf'
+        output_path_indel = indel_out_dir + 'INDEL' + '_' + 'filtered' + '_' + f_name + '.vcf.gz'
 
-        sp.call(rf'echo "sh ../germline_short/select_variants.sh {ref_genome_path} {input_vcf} {output_path_indel} \
+        sp.call(rf'echo "sh {SRC_DIR}germline_short/select_variants.sh {ref_genome_path} {input_vcf} {output_path_indel} \
                 {select_type} {seq_type} {interval_path}" | qsub \
                 -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
 
