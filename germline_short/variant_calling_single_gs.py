@@ -13,7 +13,7 @@ import os
 
 max_looping = 0
 
-script_dir = 'pass'
+script_dir = r'/data_244/stemcell/src/DNASEQ-pipeline/germline_short/'
 
 ## WORK TYPE ##
 ## case 1. haplotypeCaller ~ vcf2maf (hard)
@@ -21,17 +21,17 @@ script_dir = 'pass'
 ## case 3. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / -> 사용 x
 ## case 4. hard filter된 vcf를 CNNVariantScore ~ FilterVariantTranches까지 진행할 때 (hardcnn)
 
-gs_work_type = 'hardcnn'
+gs_work_type = 'hard'
 
 CNN_model = '2D'
 
-REF_DIR = r'/home/jun9485/data/refGenome/b37/'
+REF_DIR = r'/data_244/refGenome/b37/'
 
 data_source_dir = r'/home/jun9485/data/funcotator_data_source/funcotator_dataSources.v1.7.20200521g'
 
 ##############################################################################################
 
-# os.chdir(script_dir) # 문제 발생시 넣는 코드
+os.chdir(script_dir) # 문제 발생시 넣는 코드
 
 BAM_FILE = ''
 READ_NAME = ''
@@ -114,11 +114,11 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_haplotypeCaller.sh:_making_a_raw_vcf_file_was_failed.'
-            sp.check_call(fr'sh germline_short/haplotypeCaller.sh {REF_GENOME_PATH} {output_raw_vcf} {BAM_FILE} {INTERVAL_FILE_PATH} {seq_type} {haplotype_caller_mode}', shell=True)
+            sp.check_call(fr'sh ./haplotypeCaller.sh {REF_GENOME_PATH} {output_raw_vcf} {BAM_FILE} {INTERVAL_FILE_PATH} {seq_type} {haplotype_caller_mode}', shell=True)
             break
 
         except sp.CalledProcessError as e:
-            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
             loop_count += 1
             if loop_count > max_looping:
                 exit(0)
@@ -142,11 +142,11 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_SNP_vcf_file_was_failed.'
-            sp.check_call(fr'sh germline_short/select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {snp_vcf} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {snp_vcf} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:
-            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
             loop_count += 1
             if loop_count > max_looping:
                 exit(0)
@@ -158,11 +158,11 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_variant_filteration.sh:_making_a_SNP_filtered_vcf_file_was_failed.'
-            sp.check_call(fr'sh germline_short/variant_filteration.sh {snp_vcf} {snp_hardFiltered_output} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./variant_filteration.sh {snp_vcf} {snp_hardFiltered_output} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:
-            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
             loop_count += 1
             if loop_count > max_looping:
                 exit(0)
@@ -174,11 +174,11 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_INDEL_vcf_file_was_failed.'
-            sp.check_call(fr'sh germline_short/select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {indel_vcf} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {indel_vcf} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:
-            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
             loop_count += 1
             if loop_count > max_looping:
                 exit(0)
@@ -189,11 +189,11 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_variant_filteration.sh:_making_a_INDEL_filtered_vcf_file_was_failed.'
-            sp.check_call(fr'sh germline_short/variant_filteration.sh {indel_vcf} {indel_hardFiltered_output} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./variant_filteration.sh {indel_vcf} {indel_hardFiltered_output} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:
-            sp.call(f'sh write_log.sh {err_msg} {error_log_file}', shell=True)
+            sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
             loop_count += 1
             if loop_count > max_looping:
                 exit(0)
