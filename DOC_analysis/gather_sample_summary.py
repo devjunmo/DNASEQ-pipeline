@@ -15,7 +15,9 @@ import os
 
 # input_dir = r'/myData/DOC_data/WGS/Teratoma_project/' # WGS
 # input_dir = r'/myData/DOC_data/WES/Teratoma_project/' # WES
-input_dir = r'/data_244/utuc/DOC_results/'
+# input_dir = r'/data_244/utuc/DOC_results/'
+# input_dir = r'E:/DOC_data/WES/Teratoma_project/'
+input_dir = r'E:/DOC_data/WGS/Teratoma_project/'
 
 input_format = '*.sample_summary'
 
@@ -40,6 +42,8 @@ for i in range(len(input_path_lst)):
     sample_doc = pd.read_csv(input_file)
 
     doc_data = list(sample_doc.iloc[0,])
+    # print(doc_data)
+    # exit()
 
     sample_name = doc_data.pop(0)
 
@@ -54,6 +58,15 @@ output_path = output_dir + seq_type + '_' + output_file_name
 if os.path.isdir(output_dir) is False:
     os.mkdir(output_dir)
 
+# print(doc_df)
+
+doc_df = doc_df.loc[:, ['total', 'mean']]
+# print(type(doc_df))
+
+del doc_df['total']
 print(doc_df)
+
+
+# exit(0)
 
 doc_df.to_excel(excel_writer=output_path)
