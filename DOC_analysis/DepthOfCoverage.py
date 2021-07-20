@@ -11,7 +11,7 @@ from glob import glob
 # input_bam_list_file = input_dir + 'bam_list.txt'
 # interval_file = r'/data_244/refGenome/b37/SureSelect_v6_processed.bed'
 
-input_dir = r'/data_244/WGS/HN00146173/recal_bam/'
+input_dir = r'/data_244/utuc/'
 input_format = r'*.bam'
 ref_genome = r'/data_244/refGenome/b37/human_g1k_v37.fasta'
 output_dir_name = 'DOC_results'
@@ -23,7 +23,7 @@ wes_interval_file = r'/data_244/refGenome/b37/SureSelect_v6_processed.bed'
 
 qsub_type = 'pbs_pro' # 'pbs_pro' (최신, docker) / 'pbs_old' (240서버) / seq (큐섭 사용 x)
 
-seq_type = 'WGS'
+seq_type = 'WES'
 
 if seq_type == 'WGS':
     interval_file = wgs_interval_file
@@ -35,7 +35,7 @@ else:
 
 
 ####### pbs_pro config ###########
-pbs_N = "WGS.DOC.244"
+pbs_N = "UTUC.DOC.1"
 pbs_o = input_dir + "qsub_log/"
 pbs_j = "oe"
 pbs_l_core = 2

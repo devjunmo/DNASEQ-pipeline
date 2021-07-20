@@ -14,7 +14,8 @@ import os
 
 
 # input_dir = r'/myData/DOC_data/WGS/Teratoma_project/' # WGS
-input_dir = r'/myData/DOC_data/WES/Teratoma_project/' # WES
+# input_dir = r'/myData/DOC_data/WES/Teratoma_project/' # WES
+input_dir = r'/data_244/utuc/DOC_results/'
 
 input_format = '*.sample_summary'
 
