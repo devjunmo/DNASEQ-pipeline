@@ -30,3 +30,6 @@ for i in range(len(input_lst)):
     output_maf_path = output_dir + f_type + '_' + f_name + '.maf' 
 
     sp.call(rf"perl vcf2maf.pl --input-vcf {input_vcf_path} --output-maf {output_maf_path} --ref-fasta {fasta_path} --tmp-dir {tmp_dir}", shell=True)
+
+
+    # tumor-id 부분 넣어줘서 다시코딩

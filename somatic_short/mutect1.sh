@@ -35,7 +35,6 @@ case "$seqType" in
             --analysis_type MuTect\
             --reference_sequence $ref\
             --dbsnp $dbsnp\
-            --cosmic $cosmic\
             --intervals $target_interval\
             --input_file:tumor $tumor\
             --input_file:normal $normal\
@@ -55,7 +54,6 @@ case "$seqType" in
             --analysis_type MuTect\
             --reference_sequence $ref\
             --dbsnp $dbsnp\
-            --cosmic $cosmic\
             --input_file:tumor $tumor\
             --input_file:normal $normal\
             --out $outTxt\

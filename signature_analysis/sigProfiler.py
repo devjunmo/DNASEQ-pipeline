@@ -10,7 +10,8 @@ old_wd = os.getcwd()
 
 # root_dir = r'/home/jun9485/data/utuc/somatic_call/filtered/'
 # root_dir = r'/home/jun9485/'
-root_dir = r'/home/jun9485/data/utuc/somatic_call_mutect1/filtered_vcf/'
+# root_dir = r'/home/jun9485/data/utuc/somatic_call_mutect1/filtered_vcf/'
+root_dir = r'/home/jun9485/data/utuc/somatic_call/filtered/indel/'
 
 # input_dir_name = r'snp/'
 # input_dir_name = r'ejTest/'
