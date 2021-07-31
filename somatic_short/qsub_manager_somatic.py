@@ -26,7 +26,9 @@ interval_path = ref_dir + r'SureSelect_v6_processed.bed'
 
 pair_info = r'/data_244/utuc/utuc_NT_pair.csv'
 
-run_type = 'SID' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector)
+caller_type = 'SID' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector)
+
+is_tumor_only = False
 
 
 java7_path = r'/usr/lib/jvm/java-1.7.0/bin/java'
@@ -69,41 +71,46 @@ print(pair_dict)
 
 input_lst = glob(input_dir + input_format)
 
-# print(input_lst)
+
+
+
 
 for i in range(len(input_lst)):
     input_bam = input_lst[i]
     t_name = input_bam.split(r'/')[-1].split('.')[0].split(r'_')[-1] # tumor
     print(t_name)
-    
-    # # [Tumor bam path] [Normal bam path] [Normal name] [Germline src] [Ref genome] [interval] [Output fname] [PON]
 
-    try:
-        target_normal_name = pair_dict[t_name]['Normal']
-        normal_bam = input_dir + 'recal_deduped_sorted_' + target_normal_name + '.bam'
-        # pair_dict[f_name]['Tumor_Grade']
+    if is_tumor_only:
+        pass
+    else:    
+        # # [Tumor bam path] [Normal bam path] [Normal name] [Germline src] [Ref genome] [interval] [Output fname] [PON]
 
-        if run_type == 'MT2':
-            sp.call(f'echo "python {SRC_DIR}run_mutect2.py -n {target_normal_name} -t {t_name} -I {input_dir} -R {ref_genome_path} -L {interval_path} -y {seq_type} \
-                                            -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
-                                            -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
-        elif run_type == 'MT1':
-            out_txt_path = output_dir + t_name + '.mutect1.txt'
-            out_vcf_path = output_dir + t_name + '.mutect1.vcf'
-            sp.call(f'echo "sh {SRC_DIR}mutect1.sh {input_bam} {normal_bam} {ref_genome_path} {interval_path} {PON_path} \
-                                                    {out_txt_path} {out_vcf_path} {dbsnp_path} {cosmic_path} {seq_type} {java7_path} {mutect1_path}" | qsub \
-                                                    -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+        try:
+            target_normal_name = pair_dict[t_name]['Normal']
+            normal_bam = input_dir + 'recal_deduped_sorted_' + target_normal_name + '.bam'
+            # pair_dict[f_name]['Tumor_Grade']
 
-        elif run_type == 'SID':
-            out_vcf_path = output_dir + t_name + '.somaticindelocator.vcf'
-            sp.call(f'echo "sh {SRC_DIR}somaticIndelDetector.sh {input_bam} {normal_bam} {ref_genome_path} {interval_path} {PON_path} \
-                                                    {out_vcf_path} {dbsnp_path} {cosmic_path} {seq_type} {java7_path} {gatk_legacy_path}" | qsub \
-                                                    -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+            if caller_type == 'MT2':
+                sp.call(f'echo "python {SRC_DIR}run_mutect2.py -n {target_normal_name} -t {t_name} -I {input_dir} -R {ref_genome_path} -L {interval_path} -y {seq_type} \
+                                                -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
+                                                -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+            elif caller_type == 'MT1':
+                out_txt_path = output_dir + t_name + '.mutect1.txt'
+                out_vcf_path = output_dir + t_name + '.mutect1.vcf'
+                sp.call(f'echo "sh {SRC_DIR}mutect1.sh {input_bam} {normal_bam} {ref_genome_path} {interval_path} {PON_path} \
+                                                        {out_txt_path} {out_vcf_path} {dbsnp_path} {cosmic_path} {seq_type} {java7_path} {mutect1_path}" | qsub \
+                                                        -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
 
-    except KeyError as e:
-        print(f'{t_name} does not have target normal sample')
-        continue
-    
+            elif caller_type == 'SID':
+                out_vcf_path = output_dir + t_name + '.somaticindelocator.vcf'
+                sp.call(f'echo "sh {SRC_DIR}somaticIndelDetector.sh {input_bam} {normal_bam} {ref_genome_path} {interval_path} {PON_path} \
+                                                        {out_vcf_path} {dbsnp_path} {cosmic_path} {seq_type} {java7_path} {gatk_legacy_path}" | qsub \
+                                                        -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+
+        except KeyError as e:
+            print(f'{t_name} does not have target normal sample')
+            continue
+        
 
 
 
