@@ -3,21 +3,19 @@
 
 if [ $# -lt 9 ]
 then
-        echo usage: $0 [Tumor bam path] [Normal bam path] [Normal name] [Germline src] [Ref genome] [interval] [Output prefix] [PON] [seqType]
+        echo usage: $0 [Tumor bam path] [Germline src] [Ref genome] [interval] [Output prefix] [PON] [seqType]
         exit 1
 fi
 
 
 
 tumor=$1
-normal=$2
-nname=$3
-germ=$4
-ref=$5
-target_interval=$6
-output_prefix=$7
-PON=$8
-seqType=$9
+germ=$2
+ref=$3
+target_interval=$4
+output_prefix=$5
+PON=$6
+seqType=$7
 
 
 
@@ -30,8 +28,6 @@ case "$seqType" in
             -R "$ref"\
             --intervals "$target_interval"\
             -I "$tumor"\
-            -I "$normal"\
-            -normal "$nname"\
             -O "${output_prefix}"_mutect2.vcf\
             --f1r2-tar-gz "${output_prefix}".f1r2.tar.gz\
             --panel-of-normals "$PON"
@@ -41,8 +37,6 @@ case "$seqType" in
             --germline-resource "$germ"\
             -R "$ref"\
             -I "$tumor"\
-            -I "$normal"\
-            -normal "$nname"\
             -O "${output_prefix}"_mutect2.vcf\
             --f1r2-tar-gz "${output_prefix}".f1r2.tar.gz\
             --panel-of-normals "$PON"

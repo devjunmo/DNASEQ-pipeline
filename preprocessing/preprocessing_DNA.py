@@ -13,7 +13,7 @@ import os
 
 # !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
 
-THREADS = 5                                      
+THREADS = 2      
 REF_GENOME_DIR = '/data_244/refGenome/b37/'
 script_dir = '/data_244/stemcell/src/DNASEQ-pipeline/preprocessing/'
 

@@ -16,7 +16,6 @@ os.chdir(SRC_DIR) # 문제 발생시 넣는 코드
 
 
 
-normal_name = ''
 tumor_name = ''
 INPUT_DIR = ''
 REF_GENOME_PATH = ''
@@ -38,7 +37,6 @@ def rm_file(is_rm, file):
 
 def main(argv):
     file_name = argv[0]
-    global normal_name
     global tumor_name
     global INPUT_DIR
     global REF_GENOME_PATH
@@ -50,7 +48,7 @@ def main(argv):
     global OUTPUT_DIR
 
     try:
-        opts, etc_args = getopt.getopt(argv[1:], "hn:t:I:R:L:P:S:G:y:O:", ["help", "normalName=", "tumorName=", "inputDir=", "refPath=", "interval=", \
+        opts, etc_args = getopt.getopt(argv[1:], "ht:I:R:L:P:S:G:y:O:", ["help", "tumorName=", "inputDir=", "refPath=", "interval=", \
             "pon", "sec", "germSrc", "seqType=", "outputDir="])
 
     except getopt.GetoptError:  # 옵션지정이 올바르지 않은 경우
@@ -63,8 +61,6 @@ def main(argv):
             print(file_name, 'file name..')
             sys.exit(0)
 
-        elif opt in ("-n", "--normalName"):  # 인스턴명 입력인 경우
-            normal_name = arg
         elif opt in ("-t", "--tumorName"):
             tumor_name = arg
         elif opt in ("-I", "--inputDir"):
@@ -88,17 +84,16 @@ def main(argv):
 main(sys.argv)
 
 
-    
+
 # Mutect2
 
 # # [Tumor bam path] [Normal bam path] [Normal name] [Germline src] [Ref genome] [interval] [Output prefix] [PON] [seq_type]
 
 tumor_bam = INPUT_DIR + 'recal_deduped_sorted_' + tumor_name + '.bam'
-normal_bam = INPUT_DIR + 'recal_deduped_sorted_' + normal_name + '.bam'
 
 output_prefix = OUTPUT_DIR + tumor_name
 
-sp.call(rf'sh ./mutect2.sh {tumor_bam} {normal_bam} {normal_name} {GERM_SRC_PATH} {REF_GENOME_PATH} \
+sp.call(rf'sh ./tumor_only/mutect2.sh {tumor_bam} {GERM_SRC_PATH} {REF_GENOME_PATH} \
                         {INTERVAL_FILE_PATH} {output_prefix} {PON_PATH} {seq_type}', shell = True)
 
 

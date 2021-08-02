@@ -12,7 +12,7 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stemcell.gs' # pp일때는 안붙였어서 구분자 목적으로 언더바
+sample_group_name = 'stemcell.pp' # pp일때는 안붙였어서 구분자 목적으로 언더바
 is_making_input_list = True
 
 REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
@@ -27,10 +27,10 @@ qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
 pbs_N = "stemcell.DNA.gs"
-pbs_o = "/data_244/stemcell/WES/HN00150814_210715/pbs_out/"
+pbs_o = "/data_244/stemcell/WES/HN00153281_210719/pbs_out/"
 pbs_j = "oe"
 pbs_l_core = 3
-SRC_DIR = r"/data_244/stemcell/src/DNASEQ-pipeline/"
+SRC_DIR = r"/data_244/src/utuc_sequenza/DNASEQ-pipeline/"
 
 
 if os.path.isdir(pbs_o) is False:
@@ -43,13 +43,13 @@ is_using_parallel = False
 max_parallel_num = 2 
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
-WORKING_TYPE = "gs"
+WORKING_TYPE = "pp"
 
 # QC
 qc_output_path = 'pass'
 
 # Data pre-processing for variant discovery           
-INPUT_DIR = r'/data_244/stemcell/WES/HN00150814_210715/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/stemcell/WES/HN00153281_210719/'   # 이 디렉토리에 계속 생성시킬것
 RAW_READS = r'*.fastq.gz'                                                         
 
 # Germline short variant discovery (SNPs + Indels)
