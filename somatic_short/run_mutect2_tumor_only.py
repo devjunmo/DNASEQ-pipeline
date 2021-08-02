@@ -9,7 +9,7 @@ import os
 
 # script_dir = '/data_244/src/utuc_pp/DNASEQ-pipeline/preprocessing/'
 
-SRC_DIR = r"/data_244/src/utuc_pp/DNASEQ-pipeline/somatic_short/"
+SRC_DIR = r"/data_244/src/utuc_sequenza/DNASEQ-pipeline/somatic_short/"
 os.chdir(SRC_DIR) # 문제 발생시 넣는 코드
 
 ##############################################################################################

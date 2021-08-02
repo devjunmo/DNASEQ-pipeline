@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 
-if [ $# -lt 9 ]
+if [ $# -lt 7 ]
 then
         echo usage: $0 [Tumor bam path] [Germline src] [Ref genome] [interval] [Output prefix] [PON] [seqType]
         exit 1

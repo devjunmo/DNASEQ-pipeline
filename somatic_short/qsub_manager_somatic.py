@@ -12,7 +12,7 @@ input_dir = r'/data_244/stemcell/WES/ips_recal_bam/'
 input_format = r'recal_*.bam'
 
 # output_dir = input_dir + r'somatic_call/'
-output_dir = input_dir + r'for_pon/'
+output_dir = input_dir + r'tumor_only/'
 
 ref_dir = r'/data_244/refGenome/b37/'
 
@@ -45,7 +45,7 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "stem.mutect2.forPon"
+pbs_N = "stem.mutect2.tonly"
 pbs_o = output_dir + r"pbs_out/"
 pbs_j = "oe"
 pbs_l_core = 3
