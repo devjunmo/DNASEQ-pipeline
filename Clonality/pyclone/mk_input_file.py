@@ -81,7 +81,8 @@ for i in range(len(maf_input_lst)):
             # print(s_rows)
 
             if m_rows['Chromosome'] == s_rows['chromosome']:
-                if in_range(m_rows['Start_Position'], s_rows['start.pos'], s_rows['end.pos']) and in_range(m_rows['End_Position'], s_rows['start.pos'], s_rows['end.pos']): # 사이값에 존재 한다면
+                if in_range(m_rows['Start_Position'], s_rows['start.pos'], s_rows['end.pos']) and \
+                    in_range(m_rows['End_Position'], s_rows['start.pos'], s_rows['end.pos']): # 사이값에 존재 한다면
                     input_row = [m_rows['Tumor_Sample_Barcode'], m_rows['t_ref_count'], m_rows['t_alt_count'], NORMAL_CN, s_rows['B'], s_rows['A']]
                     
                     result_df = result_df.append(pd.Series(input_row, index=result_df.columns), ignore_index=True)
