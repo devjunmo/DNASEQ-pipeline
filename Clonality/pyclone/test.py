@@ -16,3 +16,6 @@ in_range(1, 3, 5) # false
 
 test_str = '_'.join(['a', 'b'])
 test_str
+
+
+print('my'+'my')
