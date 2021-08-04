@@ -11,8 +11,9 @@ seq_type = 'WES'
 input_dir = r'/data_244/stemcell/WES/ips_recal_bam/'
 input_format = r'recal_*.bam'
 
+output_dir_name = r'vardict_tumor_only/' # r'tumor_only/'
 # output_dir = input_dir + r'somatic_call/'
-output_dir = input_dir + r'tumor_only/'
+output_dir = input_dir + output_dir_name
 
 ref_dir = r'/data_244/refGenome/b37/'
 
@@ -26,7 +27,11 @@ interval_path = ref_dir + r'SureSelect_v6_processed.bed'
 
 pair_info = r'/data_244/utuc/utuc_NT_pair.csv'
 
-caller_type = 'MT2' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector)
+caller_type = 'VAD' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
+
+VARDICT_PATH = r'/home/pbsuser/miniconda3/envs/vardict/bin/'
+vardict_thread = 2
+vardict_af = 0.05
 
 is_tumor_only = True
 
@@ -45,7 +50,7 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "stem.mutect2.tonly"
+pbs_N = "stem.vardict.tonly"
 pbs_o = output_dir + r"pbs_out/"
 pbs_j = "oe"
 pbs_l_core = 3
@@ -81,10 +86,17 @@ for i in range(len(input_lst)):
     print(t_name)
 
     if is_tumor_only:
-        sp.call(f'echo "python {SRC_DIR}run_mutect2_tumor_only.py -t {t_name} -I {input_dir} \
-                                                -R {ref_genome_path} -L {interval_path} -y {seq_type} \
-                                                -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
-                                                -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+        if caller_type == 'MT2':
+            sp.call(f'echo "python {SRC_DIR}run_mutect2_tumor_only.py -t {t_name} -I {input_dir} \
+                                                    -R {ref_genome_path} -L {interval_path} -y {seq_type} \
+                                                    -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
+                                                    -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+        elif caller_type == 'VAD':
+            output_path = output_dir + 'vardict' + '_' + t_name + '.vcf'
+            sp.call(f'echo "{VARDICT_PATH}vardict-java -C -G {ref_genome_path} -t -N {t_name} -b {input_bam} -c 1 -S 2 -E 3 \
+                                                    -g 5 -f 0.01 -th {vardict_thread} {interval_path} | {VARDICT_PATH}teststrandbias.R |\
+                                                    {VARDICT_PATH}var2vcf_valid.pl -N {t_name} -Q 20 -d 30 -v 5 -f {vardict_af} > {output_path}" | qsub \
+                                                    -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
     else:    
         # [Tumor bam path] [Normal bam path] [Normal name] [Germline src] [Ref genome] [interval] [Output fname] [PON]
 
