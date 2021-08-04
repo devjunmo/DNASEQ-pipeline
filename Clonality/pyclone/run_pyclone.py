@@ -5,7 +5,8 @@ import os
 
 
 # input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample2'
-input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample1'
+# input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample1'
+input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/filtered_maf/pyclone/pyclone_inputs/sample2'
 
 input_format = r'*.tsv'
 
