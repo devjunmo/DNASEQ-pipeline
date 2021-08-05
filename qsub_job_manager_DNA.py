@@ -12,8 +12,10 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stemcell.pp' # pp일때는 안붙였어서 구분자 목적으로 언더바
+sample_group_name = 'stemcell.gs.5samp' # pp일때는 안붙였어서 구분자 목적으로 언더바
 is_making_input_list = True
+
+INPUT_DIR = r'/data_244/stemcell/WES/ips_recal_bam/germline_call/'   # 이 디렉토리에 계속 생성시킬것
 
 REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
 INTERVAL_FILE_PATH = '/data_244/refGenome/b37/SureSelect_v6_processed.bed'
@@ -27,14 +29,11 @@ qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
 pbs_N = "stemcell.DNA.gs"
-pbs_o = "/data_244/stemcell/WES/HN00153281_210719/pbs_out/"
+pbs_o = INPUT_DIR + r"pbs_out/"
 pbs_j = "oe"
 pbs_l_core = 3
-SRC_DIR = r"/data_244/src/utuc_sequenza/DNASEQ-pipeline/"
+SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/"
 
-
-if os.path.isdir(pbs_o) is False:
-    os.mkdir(pbs_o)
 
 
 # 큐섭 사용 안하고 시퀀셜하게 진행할때
@@ -43,22 +42,25 @@ is_using_parallel = False
 max_parallel_num = 2 
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
-WORKING_TYPE = "pp"
+WORKING_TYPE = "gs"
 
 # QC
 qc_output_path = 'pass'
 
-# Data pre-processing for variant discovery           
-INPUT_DIR = r'/data_244/stemcell/WES/HN00153281_210719/'   # 이 디렉토리에 계속 생성시킬것
+
+# Data pre-processing for variant discovery    
 RAW_READS = r'*.fastq.gz'                                                         
 
 # Germline short variant discovery (SNPs + Indels)
 PROCESSED_BAM = r'recal_*.bam'
 GSDIR = r'gs/'
-
 is_single_unit_processing = True
 
 
+
+
+if os.path.isdir(pbs_o) is False:
+    os.mkdir(pbs_o)
 
 
 # Somatic short variant discovery (SNVs + Indels)
@@ -139,6 +141,7 @@ if WORKING_TYPE == "pp":
 elif WORKING_TYPE == "gs":
     if os.path.isdir(INPUT_DIR + GSDIR) is False:
         os.mkdir(INPUT_DIR + GSDIR)
+
     if os.path.isfile(INPUT_DIR + sample_group_name + '.txt') is False:
         mk_init_file_list(INPUT_DIR, PROCESSED_BAM, sample_group_name) # recal_bam list 만들기 
     

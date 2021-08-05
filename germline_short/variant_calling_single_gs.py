@@ -13,10 +13,10 @@ import os
 
 max_looping = 0
 
-script_dir = r'/data_244/stemcell/src/DNASEQ-pipeline/germline_short/'
+script_dir = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/germline_short/"
 
 ## WORK TYPE ##
-## case 1. haplotypeCaller ~ vcf2maf (hard)
+## case 1. haplotypeCaller ~ hardFilter (hard)
 ## case 2. filter된 cnn scored vcf를 indel과 snp로 나눌때 (spcnn)
 ## case 3. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / -> 사용 x
 ## case 4. hard filter된 vcf를 CNNVariantScore ~ FilterVariantTranches까지 진행할 때 (hardcnn)
