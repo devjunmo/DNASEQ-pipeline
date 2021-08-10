@@ -8,7 +8,7 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/stemcell/WES/ips_recal_bam/'
+input_dir = r'/data_244/stemcell/WES/ips_recal_bam/test_set/'
 input_format = r'recal_*.bam'
 
 output_dir_name = r'vardict_tumor_only/' # r'tumor_only/'
@@ -30,7 +30,7 @@ pair_info = r'/data_244/utuc/utuc_NT_pair.csv'
 caller_type = 'VAD' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
 
 VARDICT_PATH = r'/home/pbsuser/miniconda3/envs/vardict/bin/'
-vardict_thread = 2
+vardict_thread = 3
 vardict_af = 0.05
 
 is_tumor_only = True
@@ -62,7 +62,7 @@ if os.path.isdir(pbs_o) is False:
 ###########################################
 
 
-SRC_DIR = r"/data_244/src/utuc_sequenza/DNASEQ-pipeline/somatic_short/"
+SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/somatic_short/"
 
 os.chdir(SRC_DIR)
 
@@ -94,7 +94,7 @@ for i in range(len(input_lst)):
         elif caller_type == 'VAD':
             output_path = output_dir + 'vardict' + '_' + t_name + '.vcf'
             sp.call(f'echo "{VARDICT_PATH}vardict-java -C -G {ref_genome_path} -t -N {t_name} -b {input_bam} -c 1 -S 2 -E 3 \
-                                                    -g 5 -f 0.01 -th {vardict_thread} {interval_path} | {VARDICT_PATH}teststrandbias.R |\
+                                                    -f 0.01 -th {vardict_thread} {interval_path} | {VARDICT_PATH}teststrandbias.R |\
                                                     {VARDICT_PATH}var2vcf_valid.pl -N {t_name} -Q 20 -d 30 -v 5 -f {vardict_af} > {output_path}" | qsub \
                                                     -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
     else:    
