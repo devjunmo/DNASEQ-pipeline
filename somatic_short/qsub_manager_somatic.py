@@ -91,6 +91,7 @@ for i in range(len(input_lst)):
                                                     -R {ref_genome_path} -L {interval_path} -y {seq_type} \
                                                     -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
                                                     -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
+                                                    
         elif caller_type == 'VAD':
             output_path = output_dir + 'vardict' + '_' + t_name + '.vcf'
             sp.call(f'echo "{VARDICT_PATH}vardict-java -C -G {ref_genome_path} -t -N {t_name} -b {input_bam} -c 1 -S 2 -E 3 \
