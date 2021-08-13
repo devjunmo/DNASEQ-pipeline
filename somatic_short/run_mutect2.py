@@ -9,7 +9,7 @@ import os
 
 # script_dir = '/data_244/src/utuc_pp/DNASEQ-pipeline/preprocessing/'
 
-SRC_DIR = r"/data_244/src/utuc_pp/DNASEQ-pipeline/somatic_short/"
+SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/somatic_short/"
 os.chdir(SRC_DIR) # 문제 발생시 넣는 코드
 
 ##############################################################################################
@@ -95,6 +95,8 @@ main(sys.argv)
 
 tumor_bam = INPUT_DIR + 'recal_deduped_sorted_' + tumor_name + '.bam'
 normal_bam = INPUT_DIR + 'recal_deduped_sorted_' + normal_name + '.bam'
+# tumor_bam = INPUT_DIR + tumor_name + '_sorted_dedup_recal.bam'
+# normal_bam = INPUT_DIR + normal_name + '_sorted_dedup_recal.bam'
 
 output_prefix = OUTPUT_DIR + tumor_name
 
@@ -130,6 +132,7 @@ sp.call(rf'sh ./calculateContamination.sh {out_gp_table} {out_seg_table} {out_co
 
 in_mutect_vcf = output_prefix + r'_mutect2.vcf'
 output_filtered_vcf = OUTPUT_DIR + r'filtered_' + tumor_name + r'_mutect2.vcf'
+# output_filtered_vcf = OUTPUT_DIR  + tumor_name + r'_mutect2_filtered.vcf'
 
 sp.call(rf'sh ./filterMutectCalls.sh {in_mutect_vcf} {output_filtered_vcf} {REF_GENOME_PATH} \
                 {out_seg_table} {out_contam_table} {out_rom}', shell = True)

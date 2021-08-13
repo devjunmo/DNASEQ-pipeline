@@ -8,10 +8,10 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/stemcell/WES/ips_recal_bam/test_set/'
-input_format = r'recal_*.bam'
+input_dir = r'/data_244/utuc/DH_test/'
+input_format = r'*.bam'
 
-output_dir_name = r'vardict_tumor_only/' # r'tumor_only/'
+output_dir_name = r'mutect2_DH_TEST/' # r'tumor_only/'
 # output_dir = input_dir + r'somatic_call/'
 output_dir = input_dir + output_dir_name
 
@@ -25,15 +25,17 @@ sec_src_path = ref_dir + r'somatic_src/small_exac_common_3.vcf.gz'
 
 interval_path = ref_dir + r'SureSelect_v6_processed.bed'
 
-pair_info = r'/data_244/utuc/utuc_NT_pair.csv'
+pair_info = r'/data_244/utuc/DH_test/DH_UTUC2_test.csv'
 
-caller_type = 'VAD' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
+caller_type = 'MT2' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
 
 VARDICT_PATH = r'/home/pbsuser/miniconda3/envs/vardict/bin/'
 vardict_thread = 3
 vardict_af = 0.05
 
-is_tumor_only = True
+is_tumor_only = False
+
+mutect2_tonly_inc_germline = False
 
 
 java7_path = r'/usr/lib/jvm/java-1.7.0/bin/java'
@@ -50,10 +52,10 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "stem.vardict.tonly"
+pbs_N = "dh_mt2_test"
 pbs_o = output_dir + r"pbs_out/"
 pbs_j = "oe"
-pbs_l_core = 3
+pbs_l_core = 2
 
 
 if os.path.isdir(pbs_o) is False:
@@ -83,6 +85,7 @@ input_lst = glob(input_dir + input_format)
 for i in range(len(input_lst)):
     input_bam = input_lst[i]
     t_name = input_bam.split(r'/')[-1].split('.')[0].split(r'_')[-1] # tumor
+    # t_name = input_bam.split(r'/')[-1].split('.')[0].split(r'_')[0] # tumor
     print(t_name)
 
     if is_tumor_only:
@@ -104,6 +107,7 @@ for i in range(len(input_lst)):
         try:
             target_normal_name = pair_dict[t_name]['Normal']
             normal_bam = input_dir + 'recal_deduped_sorted_' + target_normal_name + '.bam'
+            # normal_bam = input_dir + target_normal_name + '_sorted_dedup_recal.bam'
             # pair_dict[f_name]['Tumor_Grade']
 
             if caller_type == 'MT2':

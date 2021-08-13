@@ -31,6 +31,7 @@ case "$seqType" in
             -I "$tumor"\
             -O "${output_prefix}"_mutect2.vcf\
             --f1r2-tar-gz "${output_prefix}".f1r2.tar.gz\
+            --genotype-germline-sites true\
             --panel-of-normals "$PON"
     ;;
     "WGS")
@@ -40,6 +41,7 @@ case "$seqType" in
             -I "$tumor"\
             -O "${output_prefix}"_mutect2.vcf\
             --f1r2-tar-gz "${output_prefix}".f1r2.tar.gz\
+            --genotype-germline-sites true\
             --panel-of-normals "$PON"
     ;;
     *)

@@ -9,7 +9,8 @@ import os
 
 # script_dir = '/data_244/src/utuc_pp/DNASEQ-pipeline/preprocessing/'
 
-SRC_DIR = r"/data_244/src/utuc_sequenza/DNASEQ-pipeline/somatic_short/"
+# SRC_DIR = r"/data_244/src/utuc_sequenza/DNASEQ-pipeline/somatic_short/"
+SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/somatic_short/"
 os.chdir(SRC_DIR) # 문제 발생시 넣는 코드
 
 ##############################################################################################
@@ -25,6 +26,7 @@ PON_PATH = ''
 SEC_PATH = ''
 GERM_SRC_PATH = ''
 OUTPUT_DIR = ''
+INC_GERM = False
 
 
 def rm_file(is_rm, file):
@@ -46,10 +48,11 @@ def main(argv):
     global SEC_PATH
     global GERM_SRC_PATH
     global OUTPUT_DIR
+    global INC_GERM
 
     try:
-        opts, etc_args = getopt.getopt(argv[1:], "ht:I:R:L:P:S:G:y:O:", ["help", "tumorName=", "inputDir=", "refPath=", "interval=", \
-            "pon", "sec", "germSrc", "seqType=", "outputDir="])
+        opts, etc_args = getopt.getopt(argv[1:], "ht:I:R:L:P:S:G:y:O:g:", ["help", "tumorName=", "inputDir=", "refPath=", "interval=", \
+            "pon", "sec", "germSrc", "seqType=", "outputDir=", "incGerm="])
 
     except getopt.GetoptError:  # 옵션지정이 올바르지 않은 경우
         print(file_name, 'option error')
@@ -79,6 +82,8 @@ def main(argv):
             seq_type = arg
         elif opt in ("-O", "--outputDir"):
             OUTPUT_DIR = arg
+        elif opt in ("-g", "--incGerm"):
+            INC_GERM = arg
 
 
 main(sys.argv)
@@ -93,8 +98,14 @@ tumor_bam = INPUT_DIR + 'recal_deduped_sorted_' + tumor_name + '.bam'
 
 output_prefix = OUTPUT_DIR + tumor_name
 
-sp.call(rf'sh ./tumor_only/mutect2.sh {tumor_bam} {GERM_SRC_PATH} {REF_GENOME_PATH} \
-                        {INTERVAL_FILE_PATH} {output_prefix} {PON_PATH} {seq_type}', shell = True)
+
+if INC_GERM:
+    sp.call(rf'sh ./tumor_only/mutect2_incGerm.sh {tumor_bam} {GERM_SRC_PATH} {REF_GENOME_PATH} \
+                            {INTERVAL_FILE_PATH} {output_prefix} {PON_PATH} {seq_type}', shell = True)
+
+else:
+    sp.call(rf'sh ./tumor_only/mutect2.sh {tumor_bam} {GERM_SRC_PATH} {REF_GENOME_PATH} \
+                            {INTERVAL_FILE_PATH} {output_prefix} {PON_PATH} {seq_type}', shell = True)
 
 
 # LearnReadOrientationModel
