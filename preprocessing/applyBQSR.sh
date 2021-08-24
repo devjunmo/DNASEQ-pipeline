@@ -46,4 +46,4 @@ case "$5" in
     ;;
 esac
 
-sleep 60s
+sleep 10s

@@ -12,13 +12,13 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stemcell.gs.5samp' # pp일때는 안붙였어서 구분자 목적으로 언더바
+sample_group_name = 'stemcell.ips29.gs.hg38' # pp일때는 안붙였어서 구분자 목적으로 언더바
 is_making_input_list = True
 
-INPUT_DIR = r'/data_244/stemcell/WES/ips_recal_bam/germline_call/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/stemcell/WES/hg38_pp/'   # 이 디렉토리에 계속 생성시킬것
 
-REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
-INTERVAL_FILE_PATH = '/data_244/refGenome/b37/SureSelect_v6_processed.bed'
+REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta' 
+INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Covered.bed'
 seq_type = "WES"
 
 # qsub 사용 여부
@@ -28,7 +28,7 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "stemcell.DNA.gs"
+pbs_N = "stemcell.ips29.pp"
 pbs_o = INPUT_DIR + r"pbs_out/"
 pbs_j = "oe"
 pbs_l_core = 3
@@ -52,7 +52,7 @@ qc_output_path = 'pass'
 RAW_READS = r'*.fastq.gz'                                                         
 
 # Germline short variant discovery (SNPs + Indels)
-PROCESSED_BAM = r'recal_*.bam'
+PROCESSED_BAM = r'*_recal.bam'
 GSDIR = r'gs/'
 is_single_unit_processing = True
 
@@ -168,7 +168,7 @@ elif WORKING_TYPE == "gs":
 
             bam_file = input_path_list[i]
             # sample: recal_deduped_sorted_hiPS36-C.bam
-            read_name = bam_file.split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
+            read_name = bam_file.split('.')[-2].split(r'/')[-1].split(r'_')[0] # hiPS36-C
             
             output_raw_vcf = OUTPUT_GS_DIR + read_name + '.vcf.gz'
             output_prefix = OUTPUT_GS_DIR + read_name

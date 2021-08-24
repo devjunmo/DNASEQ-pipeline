@@ -93,10 +93,10 @@ main(sys.argv)
 
 # # [Tumor bam path] [Normal bam path] [Normal name] [Germline src] [Ref genome] [interval] [Output prefix] [PON] [seq_type]
 
-tumor_bam = INPUT_DIR + 'recal_deduped_sorted_' + tumor_name + '.bam'
-normal_bam = INPUT_DIR + 'recal_deduped_sorted_' + normal_name + '.bam'
-# tumor_bam = INPUT_DIR + tumor_name + '_sorted_dedup_recal.bam'
-# normal_bam = INPUT_DIR + normal_name + '_sorted_dedup_recal.bam'
+# tumor_bam = INPUT_DIR + 'recal_deduped_sorted_' + tumor_name + '.bam'
+# normal_bam = INPUT_DIR + 'recal_deduped_sorted_' + normal_name + '.bam'
+tumor_bam = INPUT_DIR + tumor_name + '.sorted.dedup.recal.bam'
+normal_bam = INPUT_DIR + normal_name + '.sorted.dedup.recal.bam'
 
 output_prefix = OUTPUT_DIR + tumor_name
 
@@ -131,8 +131,8 @@ sp.call(rf'sh ./calculateContamination.sh {out_gp_table} {out_seg_table} {out_co
 # [input.mutectl.vcf] [output.mutect.filtered.vcf] [ref genome] [i.segment.table] [i.calculatecontamination.table] [i.rom.tar.gz]
 
 in_mutect_vcf = output_prefix + r'_mutect2.vcf'
-output_filtered_vcf = OUTPUT_DIR + r'filtered_' + tumor_name + r'_mutect2.vcf'
-# output_filtered_vcf = OUTPUT_DIR  + tumor_name + r'_mutect2_filtered.vcf'
+# output_filtered_vcf = OUTPUT_DIR + r'filtered_' + tumor_name + r'_mutect2.vcf'
+output_filtered_vcf = OUTPUT_DIR  + tumor_name + r'_mutect2_filtered.vcf'
 
 sp.call(rf'sh ./filterMutectCalls.sh {in_mutect_vcf} {output_filtered_vcf} {REF_GENOME_PATH} \
                 {out_seg_table} {out_contam_table} {out_rom}', shell = True)

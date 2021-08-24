@@ -13,15 +13,17 @@ import os
 
 # !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
 
-THREADS = 2      
-REF_GENOME_DIR = '/data_244/refGenome/b37/'
-script_dir = '/data_244/stemcell/src/DNASEQ-pipeline/preprocessing/'
+THREADS = 3
+REF_VER = 'hg38' # 'hg38', 'b37'
+REF_GENOME_DIR = '/data_244/refGenome/hg38/v0/'
+script_dir = '/data_244/src/ips_germ_210805/DNASEQ-pipeline/preprocessing/'
+
 
  # 중간 생성물 지우기 여부
 rm_sam = True
 rm_raw_bam = True
 rm_sorted_bam = False
-rm_dedup_sorted_bam = True
+rm_dedup_sorted_bam = False
 
 sorting_order = 'coordinate' # or queryname
 
@@ -107,7 +109,6 @@ while True:
     try:
         mapping_time = time.time()
         err_msg = f'An_error_occurred_in_mappingBwaPE.sh:_Mapping_reads_was_failed.{read_name}'
-        print('hi')
         print(os.getcwd())  
         sp.check_call(fr'sh ./mappingBwaPE.sh {read1} {read2} {output_sam} {THREADS} {REF_GENOME_PATH} {read_name}', shell=True)
         break
@@ -142,8 +143,10 @@ while True:
 
 
 # sorting bam -> sorting_order: coordinate (-n 주면 queryname)
-sort_suffix = 'sorted_' + read_name + '.bam'
-sorted_bam = INPUT_DIR + sort_suffix
+# sort_suffix = 'sorted_' + read_name + '.bam'
+sort_suffix = read_name + '_sorted'
+sort_suffix_bam = sort_suffix + '.bam'
+sorted_bam = INPUT_DIR + sort_suffix_bam
 
 loop_count = 0
 
@@ -165,8 +168,8 @@ while True:
 
 # dedup bam
 metric_prefix = INPUT_DIR + read_name + '_'
-dedup_suffix = 'deduped_' + sort_suffix
-dedup_sorted_bam = INPUT_DIR + dedup_suffix
+dedup_suffix = sort_suffix + '_deduped'
+dedup_sorted_bam = INPUT_DIR + dedup_suffix + '.bam'
 
 loop_count = 0
 
@@ -216,7 +219,8 @@ while True:
     try:
         mk_table_time = time.time()
         err_msg = f'An_error_occurred_in_make_recal_table.sh:_Making_a_recal.table_file_was_failed._{read_name}'
-        sp.check_call(fr'sh ./make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {REF_GENOME_DIR} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+        sp.check_call(fr'sh ./make_recal_table.sh {dedup_sorted_bam} {table_path} {REF_GENOME_PATH} {REF_GENOME_DIR} \
+                        {seq_type} {INTERVAL_FILE_PATH} {REF_VER}', shell=True)
         break
 
     except sp.CalledProcessError as e:
@@ -228,8 +232,8 @@ while True:
 
 
 # applying the recal_table
-recal_suffix = 'recal_' + dedup_suffix
-recal_dedup_sorted_bam = INPUT_DIR + recal_suffix
+recal_suffix = dedup_suffix + '_recal'
+recal_dedup_sorted_bam = INPUT_DIR + recal_suffix + '.bam'
 ram_to_use = 20
 
 loop_count = 0

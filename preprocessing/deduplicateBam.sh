@@ -24,4 +24,4 @@ source activate gatk4
         --ASSUME_SORT_ORDER $3
 
 
-sleep 30s
+sleep 10s

@@ -25,7 +25,7 @@ gs_work_type = 'hard'
 
 CNN_model = '2D'
 
-REF_DIR = r'/data_244/refGenome/b37/'
+REF_DIR = r'/data_244/refGenome/hg38/v0/'
 
 data_source_dir = r'/home/jun9485/data/funcotator_data_source/funcotator_dataSources.v1.7.20200521g'
 
@@ -102,8 +102,9 @@ error_log_file = GS_DIR + "errorLog.txt"
 #         exit(0)
 
 
+vcf_gz = '.vcf.gz'
 
-raw_vcf = READ_NAME + '.vcf.gz'
+raw_vcf = READ_NAME + vcf_gz
 output_raw_vcf = GS_DIR + raw_vcf
 
 
@@ -125,15 +126,22 @@ if gs_work_type == 'hard':
 
 
 
-    hardFilterd_prefix = 'hardFiltered_'
     snp_type = 'SNP'
     indel_type = 'INDEL'
 
-    snp_vcf = GS_DIR + snp_type + '_' + raw_vcf
-    indel_vcf = GS_DIR + indel_type + '_' + raw_vcf
+    snp_vcf = READ_NAME + '_' + snp_type
+    indel_vcf = READ_NAME + '_' + indel_type
 
-    snp_hardFiltered_output = GS_DIR + hardFilterd_prefix + snp_type + '_' + raw_vcf
-    indel_hardFiltered_output = GS_DIR + hardFilterd_prefix + indel_type + '_' + raw_vcf
+    snp_vcf_path = GS_DIR + snp_vcf + vcf_gz
+    indel_vcf_path = GS_DIR + indel_vcf + vcf_gz
+
+    hardFilterd_suffix = 'hardFiltered'
+
+    snp_hard = snp_vcf + '_' + hardFilterd_suffix
+    indel_hard = indel_vcf + '_' + hardFilterd_suffix
+
+    snp_hardFiltered_output = GS_DIR + snp_hard + vcf_gz
+    indel_hardFiltered_output = GS_DIR + indel_hard + vcf_gz
     
 
 
@@ -142,7 +150,7 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_SNP_vcf_file_was_failed.'
-            sp.check_call(fr'sh ./select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {snp_vcf} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {snp_vcf_path} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:
@@ -158,7 +166,7 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_variant_filteration.sh:_making_a_SNP_filtered_vcf_file_was_failed.'
-            sp.check_call(fr'sh ./variant_filteration.sh {snp_vcf} {snp_hardFiltered_output} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./variant_filteration.sh {snp_vcf_path} {snp_hardFiltered_output} {snp_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:
@@ -174,7 +182,7 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_SelectVariants.sh:_making_a_INDEL_vcf_file_was_failed.'
-            sp.check_call(fr'sh ./select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {indel_vcf} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./select_variants.sh {REF_GENOME_PATH} {output_raw_vcf} {indel_vcf_path} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:
@@ -189,7 +197,7 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_variant_filteration.sh:_making_a_INDEL_filtered_vcf_file_was_failed.'
-            sp.check_call(fr'sh ./variant_filteration.sh {indel_vcf} {indel_hardFiltered_output} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
+            sp.check_call(fr'sh ./variant_filteration.sh {indel_vcf_path} {indel_hardFiltered_output} {indel_type} {seq_type} {INTERVAL_FILE_PATH}', shell=True)
             break
 
         except sp.CalledProcessError as e:

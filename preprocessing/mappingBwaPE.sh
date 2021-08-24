@@ -31,4 +31,4 @@ bwa mem \
     
 conda deactivate
 
-sleep 60s
+sleep 10s
