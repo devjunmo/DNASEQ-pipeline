@@ -8,7 +8,7 @@ fi
 
 input=$1
 output=$2
-patterned=2500
+patterned=2500 # 패턴
 
 
 

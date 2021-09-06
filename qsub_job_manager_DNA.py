@@ -12,13 +12,22 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stemcell.ips29.gs.hg38' # pp일때는 안붙였어서 구분자 목적으로 언더바
+sample_group_name = 'stem.gdc.gs' # pp일때는 안붙였어서 구분자 목적으로 언더바
 is_making_input_list = True
 
-INPUT_DIR = r'/data_244/stemcell/WES/hg38_pp/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc_ips_etc/'   # 이 디렉토리에 계속 생성시킬것
 
-REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta' 
-INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Covered.bed'
+# hg 38
+# REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta' 
+REF_GENOME_PATH = r'/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
+# INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Covered.bed'
+INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Padded.bed'
+
+# # b37
+# REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
+# INTERVAL_FILE_PATH = '/data_244/refGenome/b37/SureSelect_v6_processed.bed'
+
+
 seq_type = "WES"
 
 # qsub 사용 여부
@@ -28,8 +37,8 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "stemcell.ips29.pp"
-pbs_o = INPUT_DIR + r"pbs_out/"
+pbs_N = "stem.gdc.gs"
+pbs_o = INPUT_DIR + r"pbs_out_pp/"
 pbs_j = "oe"
 pbs_l_core = 3
 SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/"

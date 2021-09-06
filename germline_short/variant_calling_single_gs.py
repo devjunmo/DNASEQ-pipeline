@@ -1,3 +1,4 @@
+
 import subprocess as sp
 import glob
 import natsort
@@ -205,6 +206,48 @@ if gs_work_type == 'hard':
             loop_count += 1
             if loop_count > max_looping:
                 exit(0)
+
+
+
+    merge_output_dir = os.path.join(GS_DIR, 'merged_VCF')
+
+    if os.path.isdir(merge_output_dir) is False:
+        os.mkdir(merge_output_dir)
+    
+    merge_output_name = READ_NAME + '_' + hardFilterd_suffix + '_germline_merged' + vcf_gz
+
+    merge_path = os.path.join(merge_output_dir, merge_output_name)
+
+
+
+    # Merge VCF (SNP + INDEL)
+
+    loop_count = 0
+    while True:
+        try:
+            err_msg = f'An_error_occurred_in_merge_SNP_INDEL.sh:_merging_files_was_failed.'
+            sp.check_call(fr'sh ./merge_SNP_INDEL.sh {snp_hardFiltered_output} {indel_hardFiltered_output} {merge_path}', shell=True)
+            break
+
+        except sp.CalledProcessError as e:
+            sp.call(f'sh ./write_log.sh {err_msg} {error_log_file}', shell=True)
+            loop_count += 1
+            if loop_count > max_looping:
+                exit(0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if gs_work_type == 'spcnn':

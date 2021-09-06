@@ -8,16 +8,17 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/stemcell/WES/hg38_pp/'
+input_dir = r'/data_244/stemcell/WES/hg38_gdc_ips_etc/'
 input_format = r'*_recal.bam'
 
-output_dir_name = r'mutect2_tumor_only_PON/' # r'tumor_only/'
+output_dir_name = r'mutect2_tumor_only/' # r'tumor_only/'
 # output_dir = input_dir + r'somatic_call/'
 output_dir = input_dir + output_dir_name
 
 ref_dir = r'/data_244/refGenome/hg38/v0/'
 
-ref_genome_path = ref_dir + 'Homo_sapiens_assembly38.fasta'
+# ref_genome_path = ref_dir + 'Homo_sapiens_assembly38.fasta'
+ref_genome_path = ref_dir + 'gdc/GRCh38.d1.vd1.fa' # gdc
 
 # PON_path = ref_dir + r'somatic_src/mutect_PON_20151116_1000samples_over10.splited.vcf'
 # PON_path = 'null'
@@ -28,7 +29,9 @@ germ_src_path = ref_dir + r'somatic_src/af-only-gnomad.hg38.vcf.gz'
 # sec_src_path = ref_dir + r'somatic_src/small_exac_common_3.vcf.gz'
 sec_src_path = ref_dir + r'somatic_src/small_exac_common_3.hg38.vcf.gz'
 
-interval_path = ref_dir + r'interval_file/S07604514_Covered.bed'
+# interval_path = ref_dir + r'interval_file/S07604514_Covered.bed'
+interval_path = ref_dir + r'interval_file/S07604514_Padded.bed'
+
 
 caller_type = 'MT2' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
 
@@ -56,8 +59,8 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "pon_ips_mut2"
-pbs_o = output_dir + r"pbs_out/"
+pbs_N = "ips.gdc.hg38.mut2"
+pbs_o = output_dir + r"pbs_out_mut2/"
 pbs_j = "oe"
 pbs_l_core = 3
 

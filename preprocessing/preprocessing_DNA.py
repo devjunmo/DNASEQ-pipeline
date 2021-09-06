@@ -15,14 +15,19 @@ import os
 
 THREADS = 3
 REF_VER = 'hg38' # 'hg38', 'b37'
+
+
 REF_GENOME_DIR = '/data_244/refGenome/hg38/v0/'
+# REF_GENOME_DIR = '/data_244/refGenome/b37/'
+
+
 script_dir = '/data_244/src/ips_germ_210805/DNASEQ-pipeline/preprocessing/'
 
 
  # 중간 생성물 지우기 여부
 rm_sam = True
 rm_raw_bam = True
-rm_sorted_bam = False
+rm_sorted_bam = True
 rm_dedup_sorted_bam = False
 
 sorting_order = 'coordinate' # or queryname
