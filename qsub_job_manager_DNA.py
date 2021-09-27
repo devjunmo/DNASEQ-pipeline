@@ -12,10 +12,10 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stem.gdc.gs' # pp일때는 안붙였어서 구분자 목적으로 언더바
+sample_group_name = 'stem_gdc_gs'
 is_making_input_list = True
 
-INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc_ips_etc/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc_ips_210917/'   # 이 디렉토리에 계속 생성시킬것
 
 # hg 38
 # REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta' 
@@ -37,8 +37,8 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "stem.gdc.gs"
-pbs_o = INPUT_DIR + r"pbs_out_pp/"
+pbs_N = "stem.gdc.DNA.gs"
+pbs_o = INPUT_DIR + r"pbs_out_gs/"
 pbs_j = "oe"
 pbs_l_core = 3
 SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/"

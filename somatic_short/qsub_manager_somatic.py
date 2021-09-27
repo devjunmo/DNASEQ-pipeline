@@ -8,10 +8,13 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/stemcell/WES/hg38_gdc_ips_etc/'
+input_dir = r'/data_244/utuc/utuc_gdc/'
 input_format = r'*_recal.bam'
+input_bam_suffix = '_sorted_deduped_recal.bam' # 19S-72988-A10-4_sorted_deduped_recal.bam / pair info 때매 쓰는 옵션
 
-output_dir_name = r'mutect2_tumor_only/' # r'tumor_only/'
+# output_dir_name = r'mutect2_tumor_only/' # r'tumor_only/'
+output_dir_name = r'mutect2/'
+
 # output_dir = input_dir + r'somatic_call/'
 output_dir = input_dir + output_dir_name
 
@@ -39,11 +42,12 @@ VARDICT_PATH = r'/home/pbsuser/miniconda3/envs/vardict/bin/'
 vardict_thread = 3
 vardict_af = 0.05
 
-is_tumor_only = True
+# is_tumor_only = True
+is_tumor_only = False
 
-mutect2_tonly_inc_germline = True
+mutect2_tonly_inc_germline = True # tumor only 일때만 사용됨
 
-pair_info = r'/data_244/utuc/DH_test/DH_UTUC2_test.csv'
+pair_info = r'/data_244/utuc/utuc_NT_pair_ver_210910.csv'
 
 java7_path = r'/usr/lib/jvm/java-1.7.0/bin/java'
 mutect1_path = r'/home/pbsuser/mutect1/mutect-1.1.7.jar'
@@ -59,7 +63,7 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "ips.gdc.hg38.mut2"
+pbs_N = "utuc.gdc.hg38.mut2"
 pbs_o = output_dir + r"pbs_out_mut2/"
 pbs_j = "oe"
 pbs_l_core = 3
@@ -114,7 +118,7 @@ for i in range(len(input_lst)):
         try:
             target_normal_name = pair_dict[t_name]['Normal']
             # normal_bam = input_dir + 'recal_deduped_sorted_' + target_normal_name + '.bam'
-            normal_bam = input_dir + target_normal_name + '.sorted.dedup.recal.bam'
+            normal_bam = input_dir + target_normal_name + input_bam_suffix
             # pair_dict[f_name]['Tumor_Grade']
 
             if caller_type == 'MT2':
@@ -122,8 +126,8 @@ for i in range(len(input_lst)):
                                                 -P {PON_path} -S {sec_src_path} -G {germ_src_path} -O {output_dir}" | qsub \
                                                 -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
             elif caller_type == 'MT1':
-                out_txt_path = output_dir + t_name + '.mutect1.txt'
-                out_vcf_path = output_dir + t_name + '.mutect1.vcf'
+                out_txt_path = output_dir + t_name + '_mutect1.txt'
+                out_vcf_path = output_dir + t_name + '_mutect1.vcf'
                 sp.call(f'echo "sh {SRC_DIR}mutect1.sh {input_bam} {normal_bam} {ref_genome_path} {interval_path} {PON_path} \
                                                         {out_txt_path} {out_vcf_path} {dbsnp_path} {cosmic_path} {seq_type} {java7_path} {mutect1_path}" | qsub \
                                                         -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)

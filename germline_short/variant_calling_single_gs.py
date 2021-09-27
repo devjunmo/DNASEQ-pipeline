@@ -16,6 +16,8 @@ max_looping = 0
 
 script_dir = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/germline_short/"
 
+REF_DIR = r'/data_244/refGenome/hg38/v0/'
+
 ## WORK TYPE ##
 ## case 1. haplotypeCaller ~ hardFilter (hard)
 ## case 2. filter된 cnn scored vcf를 indel과 snp로 나눌때 (spcnn)
@@ -23,16 +25,14 @@ script_dir = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/germline_short/"
 ## case 4. hard filter된 vcf를 CNNVariantScore ~ FilterVariantTranches까지 진행할 때 (hardcnn)
 
 gs_work_type = 'hard'
-
 CNN_model = '2D'
-
-REF_DIR = r'/data_244/refGenome/hg38/v0/'
-
 data_source_dir = r'/home/jun9485/data/funcotator_data_source/funcotator_dataSources.v1.7.20200521g'
 
 ##############################################################################################
 
+
 os.chdir(script_dir) # 문제 발생시 넣는 코드
+
 
 BAM_FILE = ''
 READ_NAME = ''
@@ -40,6 +40,7 @@ GS_DIR = ''
 REF_GENOME_PATH = ''
 INTERVAL_FILE_PATH = ''
 seq_type = ''
+
 
 def rm_file(is_rm, file):
     if is_rm is True:

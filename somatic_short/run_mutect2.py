@@ -10,6 +10,7 @@ import os
 # script_dir = '/data_244/src/utuc_pp/DNASEQ-pipeline/preprocessing/'
 
 SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/somatic_short/"
+input_bam_suffix = '_sorted_deduped_recal.bam'
 os.chdir(SRC_DIR) # 문제 발생시 넣는 코드
 
 ##############################################################################################
@@ -95,8 +96,8 @@ main(sys.argv)
 
 # tumor_bam = INPUT_DIR + 'recal_deduped_sorted_' + tumor_name + '.bam'
 # normal_bam = INPUT_DIR + 'recal_deduped_sorted_' + normal_name + '.bam'
-tumor_bam = INPUT_DIR + tumor_name + '.sorted.dedup.recal.bam'
-normal_bam = INPUT_DIR + normal_name + '.sorted.dedup.recal.bam'
+tumor_bam = INPUT_DIR + tumor_name + input_bam_suffix
+normal_bam = INPUT_DIR + normal_name + input_bam_suffix
 
 output_prefix = OUTPUT_DIR + tumor_name
 
