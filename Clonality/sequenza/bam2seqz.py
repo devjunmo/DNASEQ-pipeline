@@ -5,22 +5,22 @@ import os
 from glob import glob
 
 
-root_dir = r'/data_244/utuc/'
-sequenza_dir = r'sequenza/'
+root_dir = r'/data_244/utuc/utuc_gdc/'
+sequenza_dir = r'CNV/sequenza/'
 
 input_dir = root_dir + sequenza_dir
 
-ref_path = r'/data_244/refGenome/b37/human_g1k_v37.fasta'
+ref_path = r'/data_244/refGenome/hg38/GDC/GRCh38.d1.vd1.fa'
 
-bam_format = r'recal_*.bam'
+bam_format = r'*_recal.bam'
 
-wig_file_path = input_dir + r'b37.gc50Base.wig.gz'
+wig_file_path = input_dir + r'hg38_gdc.gc50Base.wig.gz'
 
 output_dir_name = r'seqz/'
 
 output_suffix = r'.seqz.gz'
 
-pair_info = r'/data_244/utuc/utuc_NT_pair.csv'
+pair_info = r'/data_244/utuc/utuc_NT_pair_ver_210910.csv'
 
 tool_path = r'/home/pbsuser/miniconda3/envs/sequenza/bin/sequenza-utils'
 
@@ -35,7 +35,7 @@ pbs_N = "seqz.mutect2"
 pbs_o = output_dir + r"pbs_out/"
 pbs_j = "oe"
 pbs_l_core = 3
-SRC_DIR = r"/data_244/src/utuc_sequenza/DNASEQ-pipeline/sequenza/"
+SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/Clonality/sequenza/"
 
 if os.path.isdir(pbs_o) is False:
     os.mkdir(pbs_o)
@@ -54,7 +54,7 @@ input_bam_lst = glob(root_dir + bam_format)
 
 for i in range(len(input_bam_lst)):
     input_tumor_bam = input_bam_lst[i]
-    t_name = input_tumor_bam.split(r'/')[-1].split('.')[0].split(r'_')[-1] # 20S-14292-A1-7
+    t_name = input_tumor_bam.split(r'/')[-1].split('.')[0].split(r'_')[0] # 20S-14292-A1-7
     # print(t_name)
 
     # break
@@ -63,7 +63,7 @@ for i in range(len(input_bam_lst)):
 
     try:
         target_normal_name = pair_dict[t_name]['Normal']
-        normal_bam = root_dir + 'recal_deduped_sorted_' + target_normal_name + '.bam'
+        normal_bam = root_dir + target_normal_name + '_sorted_deduped_recal.bam'
         # pair_dict[f_name]['Tumor_Grade']
 
         output_path = output_dir + t_name + output_suffix
