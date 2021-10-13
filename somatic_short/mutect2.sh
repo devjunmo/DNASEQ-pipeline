@@ -34,6 +34,7 @@ case "$seqType" in
             -normal "$nname"\
             -O "${output_prefix}"_mutect2.vcf\
             --f1r2-tar-gz "${output_prefix}".f1r2.tar.gz\
+            -bamout "${output_prefix}"_bamout.bam\
             --panel-of-normals "$PON"
     ;;
     "WGS")

@@ -13,7 +13,7 @@ input_format = r'*_recal.bam'
 input_bam_suffix = '_sorted_deduped_recal.bam' # 19S-72988-A10-4_sorted_deduped_recal.bam / pair info 때매 쓰는 옵션
 
 # output_dir_name = r'mutect2_tumor_only/' # r'tumor_only/'
-output_dir_name = r'mutect2/'
+output_dir_name = r'mutect2_bamout/'
 
 # output_dir = input_dir + r'somatic_call/'
 output_dir = input_dir + output_dir_name

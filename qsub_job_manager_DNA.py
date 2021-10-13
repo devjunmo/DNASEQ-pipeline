@@ -12,7 +12,7 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stem_gdc2_pp'
+sample_group_name = 'stem_gdc2_gs'
 is_making_input_list = True
 
 INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc_ips_210927_HN00156554/'   # 이 디렉토리에 계속 생성시킬것
@@ -51,7 +51,7 @@ is_using_parallel = False
 max_parallel_num = 2 
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
-WORKING_TYPE = "pp"
+WORKING_TYPE = "gs"
 
 # QC
 qc_output_path = 'pass'
