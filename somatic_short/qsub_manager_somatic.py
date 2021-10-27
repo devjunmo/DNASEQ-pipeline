@@ -8,12 +8,12 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/utuc/utuc_gdc/'
+input_dir = r'/data_244/stemcell/WES/hg38_gdc_ips_etc/'
 input_format = r'*_recal.bam'
 input_bam_suffix = '_sorted_deduped_recal.bam' # 19S-72988-A10-4_sorted_deduped_recal.bam / pair info 때매 쓰는 옵션
 
 # output_dir_name = r'mutect2_tumor_only/' # r'tumor_only/'
-output_dir_name = r'mutect2_bamout/'
+output_dir_name = r'mutect2_bamout_tumor_only/'
 
 # output_dir = input_dir + r'somatic_call/'
 output_dir = input_dir + output_dir_name
@@ -42,10 +42,13 @@ VARDICT_PATH = r'/home/pbsuser/miniconda3/envs/vardict/bin/'
 vardict_thread = 3
 vardict_af = 0.05
 
-# is_tumor_only = True
-is_tumor_only = False
 
-mutect2_tonly_inc_germline = True # tumor only 일때만 사용됨
+# tumor only mode #
+
+is_tumor_only = True
+# is_tumor_only = False
+
+mutect2_tonly_inc_germline = True # tumor only 일때만 사용됨. somatic인데 germline call까지 포함할건지
 
 pair_info = r'/data_244/utuc/utuc_NT_pair_ver_210910.csv'
 
@@ -63,8 +66,8 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "utuc.gdc.hg38.mut2"
-pbs_o = output_dir + r"pbs_out_mut2/"
+pbs_N = "stem.etc.hg38.mut2"
+pbs_o = output_dir + r"pbs_out_mut2_bamout/"
 pbs_j = "oe"
 pbs_l_core = 3
 

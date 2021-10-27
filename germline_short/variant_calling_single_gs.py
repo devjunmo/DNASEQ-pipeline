@@ -109,6 +109,7 @@ vcf_gz = '.vcf.gz'
 raw_vcf = READ_NAME + vcf_gz
 output_raw_vcf = GS_DIR + raw_vcf
 
+bamout = GS_DIR + READ_NAME + '_bamout.bam'
 
 if gs_work_type == 'hard':
 
@@ -117,7 +118,8 @@ if gs_work_type == 'hard':
     while True:
         try:
             err_msg = f'An_error_occurred_in_haplotypeCaller.sh:_making_a_raw_vcf_file_was_failed.'
-            sp.check_call(fr'sh ./haplotypeCaller.sh {REF_GENOME_PATH} {output_raw_vcf} {BAM_FILE} {INTERVAL_FILE_PATH} {seq_type} {haplotype_caller_mode}', shell=True)
+            sp.check_call(fr'sh ./haplotypeCaller.sh {REF_GENOME_PATH} {output_raw_vcf} {BAM_FILE} {INTERVAL_FILE_PATH} \
+                {seq_type} {haplotype_caller_mode} {bamout}', shell=True)
             break
 
         except sp.CalledProcessError as e:

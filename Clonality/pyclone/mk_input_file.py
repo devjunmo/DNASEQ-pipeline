@@ -107,3 +107,6 @@ for i in range(len(maf_input_lst)):
     
     output_path = output_dir + sample_name + '.tsv'
     result_df.to_csv(output_path, sep='\t', index=False)
+
+
+    

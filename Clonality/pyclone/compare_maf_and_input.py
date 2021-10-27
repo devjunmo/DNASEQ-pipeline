@@ -1,3 +1,8 @@
+
+"""
+디버깅 용도, maf로 부터 tsv가 제대로 나왔는지 shape 정보로 확인
+"""
+
 import pandas as pd
 from glob import glob
 import os

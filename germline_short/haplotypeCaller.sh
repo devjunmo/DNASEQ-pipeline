@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-if [ $# -lt 6 ]
+if [ $# -lt 7 ]
 then
-    echo usage: $0 [RefGenome] [output.g.vcf.gz OR output.vcf.gz] [input.bam] [interval] [seqType: WGS/WES] [mode: gvcf or single]
+    echo usage: $0 [RefGenome] [output.g.vcf.gz OR output.vcf.gz] [input.bam] [interval] [seqType: WGS/WES] [mode: gvcf or single] [bamout]
     exit 1
 fi
 
@@ -11,6 +11,7 @@ ref_genome=$1
 output=$2
 inputBam=$3
 interval=$4
+bamout=$7
 
 
 if [ "$5" = "WGS" ]; then
@@ -38,7 +39,8 @@ case "$5" in
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx50G" HaplotypeCaller \
                     -R $ref_genome \
                     -O $output \
-                    -I $inputBam
+                    -I $inputBam \
+                    --bam-output $bamout
             ;;
             *)
                 echo "mode를 확인하시오 gvcf or single 입력"
@@ -61,7 +63,8 @@ case "$5" in
                     -R $ref_genome \
                     -O $output \
                     -I $inputBam \
-                    -L $interval
+                    -L $interval \
+                    --bam-output $bamout
             ;;
             *)
                 echo "mode를 확인하시오 gvcf or single 입력"
