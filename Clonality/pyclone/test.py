@@ -19,3 +19,6 @@ test_str
 
 
 print('my'+'my')
+
+
+print(int(2))

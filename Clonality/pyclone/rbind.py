@@ -1,6 +1,9 @@
 
 """
 sample들의pyclone input을 rbind 해주는 코드
+
+사용 안함 !!!
+
 """
 
 from ntpath import join
@@ -9,9 +12,13 @@ import os
 from glob import glob
 
 
-input_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample2'
+input_dir = r'E:/UTUC_data/gdc_hg38/maf/3rd/DP_AF_filtered_maf/True_maf/True_positive_maf/pyclone_inputs'
+# input_dir = r'E:/UTUC_data/gdc_hg38/maf/2nd/DP_AF_filtered_maf/True_maf/True_positive_maf/pyclone_inputs'
+# input_dir = r'E:/UTUC_data/gdc_hg38/maf/pyclone_input'
 input_format = '*.tsv'
-output_name = 'sample2_merged.tsv'
+
+# output_name = 'UTUC_2nd_pyclone_mergedInput.tsv'
+output_name = 'UTUC_2nd_3rd_pyclone_mergedInput.tsv'
 
 save_path = os.path.join(input_dir, output_name)
 
