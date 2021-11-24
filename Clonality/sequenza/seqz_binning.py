@@ -6,7 +6,7 @@ from glob import glob
 
 
 
-input_dir = r'/data_244/utuc/utuc_gdc/CNV/sequenza/seqz/'
+input_dir = r'/data_244/utuc/utuc_gdc_2nd_LG2_re/CNV/sequenza/seqz/'
 
 input_format = r'*.seqz.gz'
 
