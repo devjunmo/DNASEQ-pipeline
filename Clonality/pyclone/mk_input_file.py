@@ -11,12 +11,11 @@ pd.set_option('display.max_seq_items', None) # colname 생략 없이 출력
 pd.set_option('display.max_columns', None) # col 생략 없이 출력
 
 
-# maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/5th/DP_AF_filtered_maf/exclude_filterTag_utuc/True_maf/True_positive_maf'
-maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/2nd/DP_AF_filtered_maf/True_maf/True_positive_maf'
+maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/1st_lynch/DP_AF_filtered_maf'
 maf_input_format = r'*.maf'
 
-# seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc_4_5/5th/res'
-seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc2_3/res/utuc_2nd'
+seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc1/res'
+# seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc_2_re/res'
 seqz_input_format = r'*_segments.txt'
 
 
@@ -93,7 +92,7 @@ for i in range(len(maf_input_lst)):
     # print(seqz_df)
     # print(seqz_df.dtypes)
 
-    print(seqz_df)
+    # print(seqz_df)
     print('delete: NaN in seqz table.')
     seqz_df.dropna(inplace=True)
     seqz_df.reset_index(inplace=True, drop=True)
@@ -101,7 +100,7 @@ for i in range(len(maf_input_lst)):
     seqz_df = seqz_df.astype({'start.pos':int, 'end.pos':int, 'A':int, 'B':int}, errors='ignore')
 
 
-    print(seqz_df)
+    # print(seqz_df)
     
     # print(seqz_df.dtypes)
 
@@ -152,6 +151,10 @@ for i in range(len(maf_input_lst)):
             if m_rows['Chromosome'] == s_rows['chromosome']:
                 if in_range(m_rows['Start_Position'], s_rows['start.pos'], s_rows['end.pos']) and \
                     in_range(m_rows['End_Position'], s_rows['start.pos'], s_rows['end.pos']): # 사이값에 존재 한다면
+
+                    if s_rows['A'] == 0:
+                        print('Major CN must be greater 0. Passing!')
+                        break
 
                     input_row = [':'.join([m_rows['Chromosome'], str(m_rows['Start_Position']), str(m_rows['End_Position'])]), \
                         m_rows['t_ref_count'], m_rows['t_alt_count'], NORMAL_CN, s_rows['B'], s_rows['A']]

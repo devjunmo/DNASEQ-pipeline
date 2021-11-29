@@ -22,3 +22,7 @@ print('my'+'my')
 
 
 print(int(2))
+
+
+print("PyClone run_analysis_pipeline --in_files {0} --working_dir {1} \
+                        --tumour_contents {2}"".format(input_path_lst[i], output_dir, tumor_contents[i])")

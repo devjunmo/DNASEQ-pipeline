@@ -15,7 +15,7 @@ pd.set_option('display.max_columns', None) # col 생략 없이 출력
 
 # maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/3rd/DP_AF_filtered_maf/True_maf/True_positive_maf'
 # maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/5th/DP_AF_filtered_maf/exclude_filterTag_utuc/True_maf/True_positive_maf'
-maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/2nd/DP_AF_filtered_maf/True_maf/True_positive_maf'
+maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/1st_lynch/DP_AF_filtered_maf'
 maf_input_format = r'*.maf'
 
 pyclone_input_dir = os.path.join(maf_input_dir, 'pyclone_inputs')
