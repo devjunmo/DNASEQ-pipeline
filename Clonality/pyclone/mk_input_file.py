@@ -11,11 +11,11 @@ pd.set_option('display.max_seq_items', None) # colname 생략 없이 출력
 pd.set_option('display.max_columns', None) # col 생략 없이 출력
 
 
-maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/1st_lynch/DP_AF_filtered_maf'
+maf_input_dir = r'E:/UTUC_data/gdc_hg38/maf/2nd_re/DP_AF_filtered_maf/exclude_filterTag_utuc/True_positive_maf/inc_intron'
 maf_input_format = r'*.maf'
 
-seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc1/res'
-# seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc_2_re/res'
+# seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc1/res'
+seqz_input_dir = r'E:/UTUC_data/gdc_hg38/CNV/sequenza/utuc_2_re/res'
 seqz_input_format = r'*_segments.txt'
 
 

@@ -7,20 +7,24 @@ import pandas as pd
 
 # input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample2'
 # input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample1'
-input_tsv_dir = r'E:/UTUC_data/gdc_hg38/maf/1st_lynch/DP_AF_filtered_maf/pyclone_inputs'
-# input_tsv_dir = r'E:/UTUC_data/gdc_hg38/maf/3rd/DP_AF_filtered_maf/True_maf/True_positive_maf/pyclone_inputs'
+# input_tsv_dir = r'E:/UTUC_data/gdc_hg38/maf/1st_lynch/DP_AF_filtered_maf/pyclone_inputs'
+input_tsv_dir = r'/data_244/utuc/utuc_gdc/pyclone/1st_input/run2/run3'
 
 input_format = r'*.tsv'
 
-tumor_contents_info = r'E:/UTUC_data/gdc_hg38/UTUC_pyclone_tumor_contents.csv' # file_name    tumor_contents  CSV file
+tumor_contents_info = os.path.join(input_tsv_dir, 'UTUC_pyclone_tumor_contents.csv') # file_name    tumor_contents  CSV file
 
 is_qsub = True
 
-pbs_N = "utuc1_pyclone"
+pbs_N = "utuc1_pyclone_3"
 pbs_o = os.path.join(input_tsv_dir, pbs_N)
 pbs_j = "oe"
-pbs_l_core = 2
+pbs_l_core = 1
 SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/Clonality/pyclone/"
+
+if os.path.isdir(pbs_o) is False:
+    os.mkdir(pbs_o)
+
 
 
 tc_df = pd.read_csv(tumor_contents_info)
