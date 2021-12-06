@@ -12,14 +12,14 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'utuc.WES.gs'
+sample_group_name = 'teras.gs.gdc'
 is_making_input_list = True
 
-INPUT_DIR = r'/data_244/utuc/utuc_gdc_2nd_LG2_re/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc/teratoma/'   # 이 디렉토리에 계속 생성시킬것
 
 # hg 38
-# REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta' 
-REF_GENOME_PATH = r'/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
+# REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta'  # gatk
+REF_GENOME_PATH = r'/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa' # gdc
 # INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Covered.bed'
 INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Padded.bed'
 
@@ -37,8 +37,8 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "utuc.WES.gs"
-pbs_o = INPUT_DIR + r"utuc_wes_pp/"
+pbs_N = "teras.gdc.gs"
+pbs_o = INPUT_DIR + r"stem_tera19_gs/"
 pbs_j = "oe"
 pbs_l_core = 3
 SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/"

@@ -16,7 +16,7 @@ max_looping = 0
 
 script_dir = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/germline_short/"
 
-REF_DIR = r'/data_244/refGenome/hg38/v0/'
+REF_DIR = r'/data_244/refGenome/hg38/v0/' # 사용 X
 
 ## WORK TYPE ##
 ## case 1. haplotypeCaller ~ hardFilter (hard)
@@ -25,8 +25,9 @@ REF_DIR = r'/data_244/refGenome/hg38/v0/'
 ## case 4. hard filter된 vcf를 CNNVariantScore ~ FilterVariantTranches까지 진행할 때 (hardcnn)
 
 gs_work_type = 'hard'
-CNN_model = '2D'
-data_source_dir = r'/home/jun9485/data/funcotator_data_source/funcotator_dataSources.v1.7.20200521g'
+
+CNN_model = '2D' # 사용 X 
+data_source_dir = r'/home/jun9485/data/funcotator_data_source/funcotator_dataSources.v1.7.20200521g' # 사용 X
 
 ##############################################################################################
 
