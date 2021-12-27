@@ -19,7 +19,12 @@ script_dir = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/germline_short/"
 REF_DIR = r'/data_244/refGenome/hg38/v0/' # 사용 X
 
 ## WORK TYPE ##
-## case 1. haplotypeCaller ~ hardFilter (hard)
+
+## case 1. GATK best practice - joint call 사용하는 부분 (bp1)
+## case 2. haplotypeCaller ~ hardFilter (hard)
+
+
+# 사용 x
 ## case 2. filter된 cnn scored vcf를 indel과 snp로 나눌때 (spcnn)
 ## case 3. HaplotypeCaller(hc) / CNNVariantScore(cnn) /FilterVariantTranches ~ Funcotator(ft) / -> 사용 x
 ## case 4. hard filter된 vcf를 CNNVariantScore ~ FilterVariantTranches까지 진행할 때 (hardcnn)
@@ -111,6 +116,8 @@ raw_vcf = READ_NAME + vcf_gz
 output_raw_vcf = GS_DIR + raw_vcf
 
 bamout = GS_DIR + READ_NAME + '_bamout.bam'
+
+
 
 if gs_work_type == 'hard':
 

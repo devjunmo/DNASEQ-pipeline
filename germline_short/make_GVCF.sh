@@ -21,12 +21,12 @@ fi
 # max_alternate_alleles, variant_index_parameter, variant_index_type ===> x
 
 # "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx30G"
-source activate gatk4
+source activate gatk
 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" HaplotypeCaller \
     -R $ref_genome \
     -O $output \
     -I $inputBam \
     -L $interval \
-    -ERC GVCF \
+    -ERC GVCF
 
 conda deactivate

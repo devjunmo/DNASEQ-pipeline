@@ -10,7 +10,7 @@ import subprocess as sp
 # input_dir = r'/data_244/stemcell/WES/hg38_pp/gs/merged/'
 # input_dir = r'/data_244/stemcell/WES/hg38_gdc_ips_tech/mutect2_tumor_only/'
 # input_dir = r'/data_244/stemcell/WES/hg38_gdc_ips_etc/gs/merged_VCF/'
-input_dir = r'/data_244/stemcell/WES/hg38_gatk/teratoma/gs/merged_VCF/'
+input_dir = r'/data_244/stemcell/WES/fastq/ETC_samples/gs/merged_VCF/'
 
 
 # input_format = r'*_filtered.vcf'
@@ -23,18 +23,20 @@ output_suffix = r'_HAP'
 output_dir_name = r'maf/'
 tmp_dir = input_dir + 'vep_vcf/'
 # fasta_path = r'/data_244/refGenome/b37/human_g1k_v37.fasta' # b37
-fasta_path = r'/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta' # gatk
-# fasta_path = r'/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa' # gdc
+# fasta_path = r'/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta' # gatk
+fasta_path = r'/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa' # gdc
 
 # vep_data = r'/data_244/vep_data/homo_sapiens/102_GRCh38'
-ref_ver = 'GRCh38' # GRCh37 
+ref_ver = 'GRCh38'
+# ref_ver = 'GRCh37'
+
 
 SRC_DIR = r"/home/pbsuser/mskcc-vcf2maf-754d68a/"
 SRC_PATH = SRC_DIR + "vcf2maf.pl"
 
 
 ## pbs config
-pbs_N = "gatk.tera19"
+pbs_N = "gdc_stem_tera_gs_annot"
 pbs_o = input_dir + "qsub_log_maf/"
 pbs_j = "oe"
 pbs_l_core = 4
@@ -68,6 +70,8 @@ for i in range(len(input_lst)):
     output_maf_path = output_dir + f_name + output_suffix + '.maf'
 
     # sp.call(rf"perl vcf2maf.pl --input-vcf {input_vcf_path} --output-maf {output_maf_path} --ref-fasta {fasta_path} --tmp-dir {tmp_dir}", shell=True)
+
+    # --vep-data       VEP's base cache/plugin directory [~/.vep] <- symbolic link
 
     sp.call(f'echo "perl {SRC_PATH} --input-vcf {input_vcf_path} --output-maf {output_maf_path} --ref-fasta {fasta_path} --tmp-dir {tmp_dir} \
                 --tumor-id {f_name} --vcf-tumor-id {f_name} --ncbi-build {ref_ver}" \

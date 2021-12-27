@@ -33,7 +33,8 @@ case "$5" in
                     -R $ref_genome \
                     -O $output \
                     -I $inputBam \
-                    -ERC GVCF
+                    -ERC GVCF \
+                    --bam-output $bamout
             ;;
             single)
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx50G" HaplotypeCaller \
@@ -56,7 +57,8 @@ case "$5" in
                     -O $output \
                     -I $inputBam \
                     -L $interval \
-                    -ERC GVCF
+                    -ERC GVCF \
+                    --bam-output $bamout
             ;;
             single)
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xmx20G" HaplotypeCaller \

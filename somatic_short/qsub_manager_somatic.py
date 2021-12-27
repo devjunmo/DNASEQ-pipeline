@@ -8,7 +8,7 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/utuc/utuc_gdc_2nd_LG2_re/'
+input_dir = r'/data_244/utuc/utuc_gdc_BTseq/'
 input_format = r'*_recal.bam'
 input_bam_suffix = '_sorted_deduped_recal.bam' # 19S-72988-A10-4_sorted_deduped_recal.bam / pair info 때매 쓰는 옵션
 

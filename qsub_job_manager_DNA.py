@@ -12,10 +12,10 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'teras.gs.gdc'
+sample_group_name = 'stem.all.gdc.gvcf'
 is_making_input_list = True
 
-INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc/teratoma/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/'   # 이 디렉토리에 계속 생성시킬것
 
 # hg 38
 # REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta'  # gatk
@@ -37,8 +37,8 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "teras.gdc.gs"
-pbs_o = INPUT_DIR + r"stem_tera19_gs/"
+pbs_N = "stem.all.gdc.gvcf"
+pbs_o = INPUT_DIR + r"pbs_mk_gvcf/"
 pbs_j = "oe"
 pbs_l_core = 3
 SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/"
@@ -62,8 +62,12 @@ RAW_READS = r'*.fastq.gz'
 
 # Germline short variant discovery (SNPs + Indels)
 PROCESSED_BAM = r'*_recal.bam'
-GSDIR = r'gs/'
-is_single_unit_processing = True
+# GSDIR = r'gs/'
+GSDIR = r'GVCF/'
+
+# VCF or GVCF 선택
+# HAP_MODE = 'VCF'
+HAP_MODE = 'GVCF'
 
 
 
@@ -169,7 +173,7 @@ elif WORKING_TYPE == "gs":
 
     OUTPUT_GS_DIR = INPUT_DIR + GSDIR
 
-    if is_single_unit_processing is True: # 싱글 샘플 단위 진행
+    if HAP_MODE == 'VCF': # 싱글 샘플 단위 진행
         haplotype_caller_mode = 'single'
         for i in range(path_len):
             process = round(i/path_len, 2) * 100
@@ -206,31 +210,45 @@ elif WORKING_TYPE == "gs":
             # sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bam_file} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
             # sp.call(f'python germline_short/variant_calling_single_gs.py -g {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
 
-    elif is_single_unit_processing is False:
+    elif HAP_MODE == 'GVCF':
         for i in range(path_len):
             process = round(i/path_len, 2) * 100
             print(f'{process}% 진행')
 
             bamfile = input_path_list[i]
             # sample: recal_deduped_sorted_hiPS36-C.bam
-            read_name = input_path_list[i].split('.')[-2].split(r'/')[-1].split(r'_')[-1] # hiPS36-C
+            read_name = bamfile.split('.')[-2].split(r'/')[-1].split(r'_')[0] # hiPS36-C
             
-            prefix = OUTPUT_GS_DIR + read_name
+            # prefix = OUTPUT_GS_DIR + read_name
             
             output_gvcf = OUTPUT_GS_DIR + read_name + '.g.vcf.gz'
+            hap_run_mode = 'gvcf'
+            bamout_path = OUTPUT_GS_DIR + read_name + '_bamout.bam'
+            
+            # print(output_gvcf)
+            # print(bamout_path)
+            # exit(0)
+            
+            if is_using_qsub is True:
+                if qsub_type == "conf":
+                    pass
+                elif qsub_type == "man":
+                    # echo usage: $0 [RefGenome] [output.g.vcf.gz OR output.vcf.gz] [input.bam] [interval] [seqType: WGS/WES] [mode: gvcf or single] [bamout]
+                    sp.call(f'echo "sh {SRC_DIR}germline_short/haplotypeCaller.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type} {hap_run_mode} {bamout_path}" | qsub \
+                        -N {pbs_N} -o {pbs_o} -j {pbs_j} -l ncpus={pbs_l_core} &', shell=True)
 
             # HaplotypeCaller 실행
-            sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
+            # sp.call(f'qsub ~/src/qsub.1 sh germline_short/make_GVCF.sh {REF_GENOME_PATH} {output_gvcf} {bamfile} {INTERVAL_FILE_PATH} {seq_type}', shell=True)
 
-        while True:
-            sleep(300)
-            val = sp.check_output(f'qstat', shell=True, universal_newlines=True)
-            if val == "":
-                print("GVCF 생성 완료")
-                break
+        # while True:
+        #     sleep(300)
+        #     val = sp.check_output(f'qstat', shell=True, universal_newlines=True)
+        #     if val == "":
+        #         print("GVCF 생성 완료")
+        #         break
         
 
-        sp.call(f'python germline_short/variant_calling_gs.py -g {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
+        # sp.call(f'python germline_short/variant_calling_gs.py -g {OUTPUT_GS_DIR} -R {REF_GENOME_PATH} -L {INTERVAL_FILE_PATH} -y {seq_type}', shell=True)
 
     
         
