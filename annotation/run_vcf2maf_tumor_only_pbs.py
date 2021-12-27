@@ -10,7 +10,8 @@ import subprocess as sp
 # input_dir = r'/data_244/stemcell/WES/hg38_pp/gs/merged/'
 # input_dir = r'/data_244/stemcell/WES/hg38_gdc_ips_tech/mutect2_tumor_only/'
 # input_dir = r'/data_244/stemcell/WES/hg38_gdc_ips_etc/gs/merged_VCF/'
-input_dir = r'/data_244/stemcell/WES/fastq/ETC_samples/gs/merged_VCF/'
+# input_dir = r'/data_244/stemcell/WES/fastq/ETC_samples/gs/merged_VCF/'
+input_dir = r'/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/GVCF/genomic_DB/joint_call/gather/VQSR_out/per_samples/'
 
 
 # input_format = r'*_filtered.vcf'
@@ -36,10 +37,10 @@ SRC_PATH = SRC_DIR + "vcf2maf.pl"
 
 
 ## pbs config
-pbs_N = "gdc_stem_tera_gs_annot"
+pbs_N = "stem_vqsr_annot"
 pbs_o = input_dir + "qsub_log_maf/"
 pbs_j = "oe"
-pbs_l_core = 4
+pbs_l_core = 5
 
 
 output_dir = input_dir + output_dir_name
@@ -63,7 +64,8 @@ for i in range(len(input_lst)):
 
     # f_name = input_lst[i].split(r'/')[-1].split(r'.')[0].split(r'_')[1] # teratoma-4
     # f_name = input_lst[i].split(r'/')[-1].split(r'.')[0].split(r'_')[1]
-    f_name = input_lst[i].split(r'/')[-1].split(r'.')[0].split(r'_')[0]
+    # f_name = input_lst[i].split(r'/')[-1].split(r'.')[0].split(r'_')[0]
+    f_name = input_lst[i].split(r'/')[-1].split(r'.')[0].split(r'_')[-1] # VQSR vcf샘플에 대해 사용함
     # f_type = input_lst[i].split(r'/')[-1].split(r'.')[0].split(r'_')[-2] # snp/indel
     
     input_vcf_path = input_lst[i]
