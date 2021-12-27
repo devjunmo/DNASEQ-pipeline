@@ -26,7 +26,7 @@ case "$refVer" in
         snp_ks_hapmap=$ref_dir"/hapmap_3.3.hg38.vcf.gz"
         snp_ks_omni=$ref_dir"/1000G_omni2.5.hg38.vcf.gz"
         snp_ks_1KGP1=$ref_dir"/1000G_phase1.snps.high_confidence.hg38.vcf.gz"
-        snp_ks_dbsnp=$ref_Dir"/Homo_sapiens_assembly38.dbsnp138.vcf.gz"
+        snp_ks_dbsnp=$ref_dir"/Homo_sapiens_assembly38.dbsnp138.vcf.gz"
     ;;
 
     *)
@@ -50,10 +50,10 @@ case "$varType" in
                     --resource:1000G,known=false,training=true,truth=false,prior=10.0 ${snp_ks_1KGP1} \
                     --resource:dbsnp,known=true,training=false,truth=false,prior=2.0 ${snp_ks_dbsnp} \
                     -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR \
-                    -mode SNP \
-                    -O output.recal \
-                    --tranches-file output.tranches \
-                    --rscript-file output.plots.R
+                    -mode ${varType} \
+                    -O ${output_prefix}.recal \
+                    --tranches-file ${output_prefix}.tranches \
+                    --rscript-file ${output_prefix}.plots.R
             ;;
             WES)
                 gatk --java-options "-XX:ParallelGCThreads=1 -XX:ConcGCThreads=1 -Xms20G -Xmx20G" VariantRecalibrator \
@@ -64,10 +64,10 @@ case "$varType" in
                     --resource:1000G,known=false,training=true,truth=false,prior=10.0 ${snp_ks_1KGP1} \
                     --resource:dbsnp,known=true,training=false,truth=false,prior=2.0 ${snp_ks_dbsnp} \
                     -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR \
-                    -mode ${seqType} \
-                    -O ${output_prefix}".recal" \
-                    --tranches-file ${output_prefix}".tranches" \
-                    --rscript-file ${output_prefix}".plots.R" \
+                    -mode ${varType} \
+                    -O ${output_prefix}.recal \
+                    --tranches-file ${output_prefix}.tranches \
+                    --rscript-file ${output_prefix}.plots.R \
                     -L ${interval}
             ;;
             *)
