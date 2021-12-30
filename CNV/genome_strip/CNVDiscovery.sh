@@ -4,7 +4,7 @@
 classpath="${SV_DIR}/lib/SVToolkit.jar:${SV_DIR}/lib/gatk/GenomeAnalysisTK.jar:${SV_DIR}/lib/gatk/Queue.jar"
  
 
-ref_genome='/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
+ref_genome='/data_244/refGenome/hg38/GDC/GRCh38.d1.vd1.fa'
 input_lst='/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/CNV/Genome_strip/pp_v3/stem_all_bam.list'
 out_meta_dir='/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/CNV/Genome_strip/pp_v3/meta_data'
 pp_log_dir='/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/CNV/Genome_strip/pp_v3/log_pp'
