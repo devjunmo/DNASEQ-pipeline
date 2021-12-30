@@ -8,15 +8,15 @@ import pandas as pd
 # input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample2'
 # input_tsv_dir = r'E:/UTUC_data/WES/rmhd_maf/mutect/mutect2/pyclone_inputs/sample1'
 # input_tsv_dir = r'E:/UTUC_data/gdc_hg38/maf/1st_lynch/DP_AF_filtered_maf/pyclone_inputs'
-input_tsv_dir = r'/data_244/utuc/utuc_gdc/pyclone/pyclone2'
-
+input_tsv_dir = r'/data_244/utuc/utuc_gdc/pyclone/exonic_1st'
 input_format = r'*.tsv'
+tumor_contents_info_name = r'UTUC_pyclone_tumor_contents.csv'
 
-tumor_contents_info = os.path.join(input_tsv_dir, 'UTUC_pyclone_tumor_contents.csv') # file_name    tumor_contents  CSV file
+tumor_contents_info = os.path.join(input_tsv_dir, tumor_contents_info_name) # file_name    tumor_contents  CSV file
 
 is_qsub = True
 
-pbs_N = "utuc_pyclone_intron"
+pbs_N = "utuc1_pyclone_exonic"
 pbs_o = os.path.join(input_tsv_dir, pbs_N)
 pbs_j = "oe"
 pbs_l_core = 1
