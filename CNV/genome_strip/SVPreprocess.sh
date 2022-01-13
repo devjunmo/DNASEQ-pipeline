@@ -8,10 +8,12 @@ queue_name='testQ'
 log_directory='/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/CNV/Genome_strip/test'
 workflow_manager_options='-R rusage[mem=8192]'
 
-ref_genome='/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
-input_lst='/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/CNV/Genome_strip/pp_v3/stem_all_bam.list'
-out_meta_dir='/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/CNV/Genome_strip/pp_v3/meta_data'
-pp_log_dir='/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/CNV/Genome_strip/pp_v3/log_pp'
+# ref_genome='/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
+ref_genome='/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta'
+
+input_lst='/data_244/stemcell/WES/hg38_gatk/teratoma/CNV/STRiP/test/stem_gatk_bam_test.list'
+out_meta_dir='/data_244/stemcell/WES/hg38_gatk/teratoma/CNV/STRiP/test/meta_data'
+pp_log_dir='/data_244/stemcell/WES/hg38_gatk/teratoma/CNV/STRiP/test/log_pp'
 
 gender_mask='/data_244/FTP_DOWN/Homo_sapiens_assembly38/Homo_sapiens_assembly38.gendermask.bed'
 ploid_map='/data_244/FTP_DOWN/Homo_sapiens_assembly38/Homo_sapiens_assembly38.ploidymap.txt'

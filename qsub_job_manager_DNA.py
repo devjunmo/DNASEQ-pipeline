@@ -12,10 +12,10 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stem.all.gdc.gvcf'
+sample_group_name = 'stem_WGS_hg38'
 is_making_input_list = True
 
-INPUT_DIR = r'/data_244/stemcell/WES/hg38_gdc/hg38_gdc_all_bam/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data_244/stemcell/WGS/fastq/'   # 이 디렉토리에 계속 생성시킬것
 
 # hg 38
 # REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta'  # gatk
@@ -28,7 +28,8 @@ INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Padded
 # INTERVAL_FILE_PATH = '/data_244/refGenome/b37/SureSelect_v6_processed.bed'
 
 
-seq_type = "WES"
+# seq_type = "WES"
+seq_type = "WGS"
 
 # qsub 사용 여부
 is_using_qsub = True
@@ -37,10 +38,10 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "stem.all.gdc.gvcf"
-pbs_o = INPUT_DIR + r"pbs_mk_gvcf/"
+pbs_N = "stem_WGS"
+pbs_o = INPUT_DIR + r"pbs_stem_pp/"
 pbs_j = "oe"
-pbs_l_core = 3
+pbs_l_core = 4
 SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/"
 
 
@@ -51,14 +52,15 @@ is_using_parallel = False
 max_parallel_num = 2 
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
-WORKING_TYPE = "gs"
+WORKING_TYPE = "pp"
 
 # QC
 qc_output_path = 'pass'
 
 
 # Data pre-processing for variant discovery    
-RAW_READS = r'*.fastq.gz'                                                         
+RAW_READS = r'*.fastq.gz'
+# RAW_READS = r'*.fasta'
 
 # Germline short variant discovery (SNPs + Indels)
 PROCESSED_BAM = r'*_recal.bam'
