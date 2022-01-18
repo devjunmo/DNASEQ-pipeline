@@ -2,8 +2,11 @@ from time import sleep
 
 
 
-print('sleep start')
+# print('sleep start')
 
-sleep(80)
+# sleep(80)
 
-print('sleep end')
+# print('sleep end')
+
+my_ttest = 'hello'
+print(f'{my_ttest} world')

@@ -8,18 +8,19 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data_244/utuc/utuc_gdc_BTseq/'
+input_dir = r'/data/stemcell/WES/'
 input_format = r'*_recal.bam'
 input_bam_suffix = '_sorted_deduped_recal.bam' # 19S-72988-A10-4_sorted_deduped_recal.bam / pair info 때매 쓰는 옵션
 
 # output_dir_name = r'mutect2_tumor_only/' # r'tumor_only/'
 # output_dir_name = r'mutect2_bamout_tumor_only/'
-output_dir_name = r'mutect2_utuc/'
+output_dir_name = r'mutect2_stemcell/'
 
 # output_dir = input_dir + r'somatic_call/'
 output_dir = input_dir + output_dir_name
 
-ref_dir = r'/data_244/refGenome/hg38/v0/'
+# ref_dir = r'/data_244/refGenome/hg38/v0/'
+ref_dir = r'/data/refGenome/hg38/v0/'
 
 # ref_genome_path = ref_dir + 'Homo_sapiens_assembly38.fasta'
 ref_genome_path = ref_dir + 'gdc/GRCh38.d1.vd1.fa' # gdc
@@ -51,7 +52,9 @@ is_tumor_only = False
 
 mutect2_tonly_inc_germline = True # tumor only 일때만 사용됨. somatic인데 germline call까지 포함할건지
 
-pair_info = r'/data_244/utuc/utuc_NT_pair_ver_211029_utuc4_1.csv'
+pair_info = r'/data/stemcell/stemcell_WES_sample_pair_220117.csv'
+pair_info_tumor_col_name = 'Tumor'
+pair_info_normal_col_name = 'Normal'
 
 java7_path = r'/usr/lib/jvm/java-1.7.0/bin/java'
 mutect1_path = r'/home/pbsuser/mutect1/mutect-1.1.7.jar'
@@ -67,8 +70,8 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "utuc.mut2"
-pbs_o = output_dir + r"pbs_out_utuc/"
+pbs_N = "stem.mut2"
+pbs_o = output_dir + r"pbs_out_stem_mut2/"
 pbs_j = "oe"
 pbs_l_core = 3
 
@@ -79,13 +82,13 @@ if os.path.isdir(pbs_o) is False:
 ###########################################
 
 
-SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/somatic_short/"
+SRC_DIR = r"/data/src/DNASEQ-pipeline/somatic_short/"
 
 os.chdir(SRC_DIR)
 
 
 pair_df = pd.read_csv(pair_info)
-pair_df.set_index('Tumor', inplace=True)
+pair_df.set_index(pair_info_tumor_col_name, inplace=True)
 
 pair_dict = pair_df.to_dict('index') # {tumor : {normal:_ grade:_} dict 형태. fname
 
@@ -120,7 +123,7 @@ for i in range(len(input_lst)):
         # [Tumor bam path] [Normal bam path] [Normal name] [Germline src] [Ref genome] [interval] [Output fname] [PON]
 
         try:
-            target_normal_name = pair_dict[t_name]['Normal']
+            target_normal_name = pair_dict[t_name][pair_info_normal_col_name]
             # normal_bam = input_dir + 'recal_deduped_sorted_' + target_normal_name + '.bam'
             normal_bam = input_dir + target_normal_name + input_bam_suffix
             # pair_dict[f_name]['Tumor_Grade']

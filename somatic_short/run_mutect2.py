@@ -9,7 +9,10 @@ import os
 
 # script_dir = '/data_244/src/utuc_pp/DNASEQ-pipeline/preprocessing/'
 
-SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/somatic_short/"
+# SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/somatic_short/"
+SRC_DIR = r'/data/src/DNASEQ-pipeline/somatic_short/'
+
+
 input_bam_suffix = '_sorted_deduped_recal.bam'
 os.chdir(SRC_DIR) # 문제 발생시 넣는 코드
 
