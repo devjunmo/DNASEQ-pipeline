@@ -7,7 +7,7 @@ import pandas as pd
 import shutil
 
 
-root_dir = r"E:/UTUC_data/gdc_hg38/maf/pyclone/pyclone2_inc_intron/pyclone2"
+root_dir = r"E:/UTUC_data/gdc_hg38/maf/5th/DP_AF_filtered_maf/exclude_filterTag_utuc/True_positive_maf/pyclone_inputs"
 
 out_dir_lst = glob(os.path.join(root_dir, 'Output_*'))
 # print(out_dir_lst)
