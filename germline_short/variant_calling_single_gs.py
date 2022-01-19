@@ -14,7 +14,7 @@ import os
 
 max_looping = 0
 
-script_dir = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/germline_short/"
+script_dir = r"/data/src/DNASEQ-pipeline/germline_short/"
 
 REF_DIR = r'/data_244/refGenome/hg38/v0/' # 사용 X
 

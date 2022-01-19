@@ -12,37 +12,38 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stem_WGS_hg38'
+sample_group_name = 'stem_WES_finger'
 is_making_input_list = True
 
-INPUT_DIR = r'/data_244/stemcell/WGS/fastq/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data/stemcell/WES/'   # 이 디렉토리에 계속 생성시킬것
 
 # hg 38
 # REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta'  # gatk
-REF_GENOME_PATH = r'/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa' # gdc
+REF_GENOME_PATH = r'/data/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa' # gdc
 # INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Covered.bed'
-INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Padded.bed'
+# INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Padded.bed'
+INTERVAL_FILE_PATH = r'/data/refGenome/hg38/finger_target_hg38.bed'
 
 # # b37
 # REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
 # INTERVAL_FILE_PATH = '/data_244/refGenome/b37/SureSelect_v6_processed.bed'
 
 
-# seq_type = "WES"
-seq_type = "WGS"
+seq_type = "WES"
+# seq_type = "WGS"
 
 # qsub 사용 여부
 is_using_qsub = True
-qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동지정)
+qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동지정 - openpbs)
 
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "stem_WGS"
-pbs_o = INPUT_DIR + r"pbs_stem_pp/"
+pbs_N = "stem_WES_finger"
+pbs_o = INPUT_DIR + r"pbs_stem_finger/"
 pbs_j = "oe"
 pbs_l_core = 4
-SRC_DIR = r"/data_244/src/ips_germ_210805/DNASEQ-pipeline/"
+SRC_DIR = r"/data/src/DNASEQ-pipeline/"
 
 
 
@@ -52,7 +53,7 @@ is_using_parallel = False
 max_parallel_num = 2 
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
-WORKING_TYPE = "pp"
+WORKING_TYPE = "gs"
 
 # QC
 qc_output_path = 'pass'
@@ -65,11 +66,12 @@ RAW_READS = r'*.fastq.gz'
 # Germline short variant discovery (SNPs + Indels)
 PROCESSED_BAM = r'*_recal.bam'
 # GSDIR = r'gs/'
-GSDIR = r'GVCF/'
+# GSDIR = r'GVCF/'
+GSDIR = r'finger_gs/'
 
 # VCF or GVCF 선택
-# HAP_MODE = 'VCF'
-HAP_MODE = 'GVCF'
+HAP_MODE = 'VCF'
+# HAP_MODE = 'GVCF'
 
 
 
