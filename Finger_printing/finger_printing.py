@@ -14,7 +14,7 @@ output_dir_name = r'FP_output'
 # col: Tumor / Normal로 세팅
 pair_info_csv = r'E:/stemcell/finger_print/stemcell_WES_sample_pair_220117.csv'
 output_dir = os.path.join(input_dir, output_dir_name)
-output_path = os.path.join(output_dir, 'stemcell_WES_fingerprint.csv')
+output_path = os.path.join(output_dir, 'stemcell_WES_fingerprint.xlsx')
 
 
 class FingerPrint():
@@ -71,7 +71,7 @@ class FingerPrint():
             vcf_df = self.__vcf_setting(_vcf_list[i])
             # print(vcf_df)
             mut_id_tmp_lst = vcf_df['mut_id'].to_list()
-            filter_tmp_lst = vcf_df['FILTER'].to_list()
+            filter_tmp_lst = vcf_df['ALT'].to_list()
             mutid_info_dict = dict(zip(mut_id_tmp_lst, filter_tmp_lst))
             # print(mutid_info_dict)
             # mutid_dict => {mutid : pass, mutid2:SOR ...}
@@ -82,9 +82,9 @@ class FingerPrint():
             # _empty_fp_df.loc[_idx, 'chr4_72750280'] = 100
             # print(_empty_fp_df)
 
-            for _mutID, _filter in mutid_info_dict.items():
+            for _mutID, _alt in mutid_info_dict.items():
                 # print(_mutID, _filter)
-                _empty_fp_df.loc[_idx, _mutID] = _filter
+                _empty_fp_df.loc[_idx, _mutID] = _alt
                 # print(_empty_fp_df)
             # exit(0)
 
@@ -107,5 +107,7 @@ finger_print_df = finger_print_obj.finger_print_df
 
 print(finger_print_df)
 
-finger_print_df.to_csv(output_path, header=True,
-                       index=True, quoting=False, na_rep='NaN')
+# finger_print_df.to_csv(output_path, header=True,
+#                        index=True, quoting=False, na_rep='NaN')
+print(os.getcwd())
+finger_print_df.to_excel(output_path, na_rep='NaN', header=True, index=True)
