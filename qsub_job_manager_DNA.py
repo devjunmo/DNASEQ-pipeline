@@ -12,17 +12,18 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'stem_WES_finger'
+sample_group_name = 'utuc_WES'
 is_making_input_list = True
 
-INPUT_DIR = r'/data/stemcell/WES/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data/utuc/WES/fastq/'   # 이 디렉토리에 계속 생성시킬것
 
 # hg 38
 # REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta'  # gatk
 REF_GENOME_PATH = r'/data/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa' # gdc
 # INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Covered.bed'
 # INTERVAL_FILE_PATH = '/data_244/refGenome/hg38/v0/interval_file/S07604514_Padded.bed'
-INTERVAL_FILE_PATH = r'/data/refGenome/hg38/finger_target_hg38.bed'
+INTERVAL_FILE_PATH = r'/data/refGenome/hg38/v0/interval_file/S07604514_Padded.bed'
+# INTERVAL_FILE_PATH = r'/data/refGenome/hg38/finger_target_hg38.bed'
 
 # # b37
 # REF_GENOME_PATH = '/data_244/refGenome/b37/human_g1k_v37.fasta' 
@@ -40,9 +41,9 @@ qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
 pbs_N = "stem_WES_finger"
-pbs_o = INPUT_DIR + r"pbs_stem_finger/"
+pbs_o = INPUT_DIR + r"pbs_utuc/"
 pbs_j = "oe"
-pbs_l_core = 4
+pbs_l_core = 20
 SRC_DIR = r"/data/src/DNASEQ-pipeline/"
 
 
@@ -53,7 +54,7 @@ is_using_parallel = False
 max_parallel_num = 2 
 
 # Fastqc(qc) / preprocessing(pp) / germShort(gs) / somaticShort(ss) / germCNV(gc) / somaticCNV(sc)
-WORKING_TYPE = "gs"
+WORKING_TYPE = "pp"
 
 # QC
 qc_output_path = 'pass'

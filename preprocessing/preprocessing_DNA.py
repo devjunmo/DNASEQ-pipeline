@@ -13,15 +13,16 @@ import os
 
 # !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
 
-THREADS = 3
+THREADS = 20
 REF_VER = 'hg38' # 'hg38', 'b37'
 
 
-REF_GENOME_DIR = '/data_244/refGenome/hg38/v0/'
+# REF_GENOME_DIR = '/data_244/refGenome/hg38/v0/'
 # REF_GENOME_DIR = '/data_244/refGenome/b37/'
+REF_GENOME_DIR = '/data/refGenome/hg38/v0/'
 
 
-script_dir = '/data_244/src/ips_germ_210805/DNASEQ-pipeline/preprocessing/'
+script_dir = '/data/src/DNASEQ-pipeline/preprocessing/'
 
 
  # 중간 생성물 지우기 여부
