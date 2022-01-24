@@ -23,7 +23,6 @@ SRC_DIR = r"/data/src/DNASEQ-pipeline/"
 
 output_dir = jun_mtd.set_output_dir(input_dir, output_dir_name)
 
-
 input_lst = jun_mtd.get_input_path_list(input_dir, '*.bam', True)
 
 

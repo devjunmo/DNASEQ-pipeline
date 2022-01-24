@@ -17,3 +17,6 @@ def set_output_dir(_root_dir, _output_dir_name):
         os.mkdir(output_dir)
     return output_dir
 
+# path에서 파일명만 가져오기
+def get_f_name(_path):
+    return os.path.basename(_path)
