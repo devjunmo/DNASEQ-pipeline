@@ -7,9 +7,7 @@ import numpy as np
 import pandas as pd
 import sys
 import matplotlib.pyplot as plt
-
 sys.path.append(os.path.join(os.getcwd(), 'jun_tools'))
-
 import jun_mtd
 
 input_dir = r'E:/stemcell/mouse_mapping/flagstat'
@@ -85,8 +83,6 @@ class CheckMappingRate():
         plt.xticks(rotation=-90)
         plt.grid(axis='both', linestyle='--')
         plt.legend(loc=1, prop={'size': 30})
-        # plt.xlabel('Sample', fontsize=14)
-        # plt.ylabel('mapped %', fontsize=14)
 
         plt.show()
         exit(0)
