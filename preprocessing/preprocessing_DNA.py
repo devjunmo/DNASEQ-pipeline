@@ -13,7 +13,7 @@ import os
 
 # !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
 
-THREADS = 20
+THREADS = 10
 REF_VER = 'hg38' # 'hg38', 'b37'
 
 

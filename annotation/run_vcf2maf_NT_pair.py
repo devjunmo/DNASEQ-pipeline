@@ -4,7 +4,7 @@ import subprocess as sp
 import pandas as pd
 
 
-input_dir = r'/data/stemcell/WES/vardict_somatic_stemcell/pass_vdf/'
+input_dir = r'/data/stemcell/WES/GRCh38/processing_data/re_calling/vardict_somatic_stemcell/'
 
 input_format = r'*_pass.vcf'
 
@@ -14,7 +14,7 @@ tmp_dir = input_dir + r'vep_vcfs/'
 # fasta_path = r'/data_244/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
 fasta_path = r'/data/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
 
-# SRC_DIR = r"/home/pbsuser/mskcc-vcf2maf-754d68a/"
+# SRC_DIR = r"/home/pbsuser/mskcc-vcf2maf-754d68a/"~
 SRC_DIR = r'/home/jun/mskcc-vcf2maf-754d68a/'
 SRC_PATH = SRC_DIR + "vcf2maf.pl"
 
@@ -24,7 +24,7 @@ ref_ver = 'GRCh38' # GRCh37
 
 
 ## pbs config
-pbs_N = "stem.vad.annot"
+pbs_N = "stem.mut2.vad"
 pbs_o = input_dir + r"qsub_log/"
 pbs_j = "oe"
 pbs_l_core = 4
@@ -33,7 +33,7 @@ pbs_l_core = 4
 output_dir = input_dir + output_dir_name
 
 # tumor_normal_id_info = r'/data_244/utuc/utuc_NT_pair_ver_211029_utuc4_1.csv'
-tumor_normal_id_info = r'/data/stemcell/stemcell_WES_sample_pair_220117.csv'
+tumor_normal_id_info = r'/data/stemcell/WES/GRCh38/stemcell_WES_sample_pair_220216.csv'
 
 
 pair_df = pd.read_csv(tumor_normal_id_info)
@@ -76,7 +76,7 @@ for i in range(len(input_lst)):
 
     # t_id = sample_name.split('-')[-2] + '-' + sample_name.split('-')[-1] # A4-5
     t_id = sample_name
-
+ 
     try:
         n_id = pair_dict[sample_name]['Normal']
 

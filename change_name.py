@@ -4,7 +4,7 @@ import os
 
 
 
-input_dir = '/data_244/utuc_3rd/hg38/test'
+input_dir = '/data/utuc/RNAseq/processing_Data'
 
 input_lst = glob(os.path.join(input_dir, '*.gz'))
 

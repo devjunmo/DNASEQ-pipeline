@@ -12,10 +12,10 @@ print(os.getcwd())
 # paired end 기준으로 돌아감 
 
 ####################### hyper parameters ########################################
-sample_group_name = 'utuc_WES'
+sample_group_name = 'stem_WES'
 is_making_input_list = True
 
-INPUT_DIR = r'/data/utuc/WES/fastq/'   # 이 디렉토리에 계속 생성시킬것
+INPUT_DIR = r'/data/stemcell/WES/GRCh38/processing_data/'   # 이 디렉토리에 계속 생성시킬것
 
 # hg 38
 # REF_GENOME_PATH = '/data_244/refGenome/hg38/v0/Homo_sapiens_assembly38.fasta'  # gatk
@@ -40,10 +40,10 @@ qsub_type = "man" #  conf(옵션 컨피그 파일로 지정), man(옵션 수동�
 qsub_config_name = r'/home/jun9485/src/qsub.5'
 
 ## man인 경우
-pbs_N = "stem_WES_finger"
-pbs_o = INPUT_DIR + r"pbs_utuc/"
+pbs_N = "stem_WES_10"
+pbs_o = INPUT_DIR + r"pbs_stem_pp/"
 pbs_j = "oe"
-pbs_l_core = 20
+pbs_l_core = 10
 SRC_DIR = r"/data/src/DNASEQ-pipeline/"
 
 

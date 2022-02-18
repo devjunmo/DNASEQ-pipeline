@@ -8,7 +8,7 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data/stemcell/WES/'
+input_dir = r'/data/stemcell/WES/GRCh38/processing_data/re_calling/'
 input_format = r'*_recal.bam'
 input_bam_suffix = '_sorted_deduped_recal.bam' # 19S-72988-A10-4_sorted_deduped_recal.bam / pair info 때매 쓰는 옵션
 
@@ -41,22 +41,25 @@ interval_path = ref_dir + r'interval_file/S07604514_Padded.bed'
 
 caller_type = 'VAD' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
 
+# vardict 사용시 설정
 VARDICT_PATH = r'/home/jun/miniconda3/envs/vardict_java/bin/'
-vardict_thread = 10
+vardict_thread = 30
 vardict_af = 0.05
 
-
-# tumor only mode #
+# tumor only mode 설정
 
 # is_tumor_only = True
-is_tumor_only = False
+is_tumor_only = False # pair mode
 
+# tumor only mode 사용시 설정
 mutect2_tonly_inc_germline = True # tumor only 일때만 사용됨. somatic인데 germline call까지 포함할건지
 
-pair_info = r'/data/stemcell/stemcell_WES_sample_pair_220117.csv'
+# pair mode 사용시 설정
+pair_info = r'/data/stemcell/WES/GRCh38/stemcell_WES_sample_pair_220216.csv'
 pair_info_tumor_col_name = 'Tumor'
 pair_info_normal_col_name = 'Normal'
 
+# mutect1 사용시 설정
 java7_path = r'/usr/lib/jvm/java-1.7.0/bin/java'
 mutect1_path = r'/home/pbsuser/mutect1/mutect-1.1.7.jar'
 gatk_legacy_path = r'/home/pbsuser/LagacyGATK/GenomeAnalysisTK.jar'
@@ -71,7 +74,7 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "stem.vadict"
+pbs_N = "stem.wes_vad"
 pbs_o = output_dir + r"pbs_out_stem_vad_somatic/"
 pbs_j = "oe"
 pbs_l_core = 4
@@ -149,6 +152,8 @@ for i in range(len(input_lst)):
                 output_path = output_dir + t_name + '_somatic_vardict.vcf'
                 vardict_somatic_input_bam = f'"{input_bam}|{normal_bam}"'
                 vardict_somatic_input_name = f'"{t_name}|{target_normal_name}"'
+                
+                # pair mode에서는 알수 없는 이유로 진행되지 않음. cmd만 print해서 .sh로 가져온다음 실행
                 
                 print(rf"{VARDICT_PATH}vardict-java -G {ref_genome_path} -t -N {t_name} -b {vardict_somatic_input_bam} -c 1 -S 2 -E 3 \
                                                     -f 0.01 -th {vardict_thread} {interval_path} | {VARDICT_PATH}testsomatic.R |\
