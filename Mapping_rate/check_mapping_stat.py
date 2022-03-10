@@ -7,7 +7,7 @@ from jun_tools import jun_mtd
 
 print(sys.path)
 
-input_dir = r'/data/stemcell/WES/mouse/ips/bamfiles'
+input_dir = r'/data/utuc/WES/for_mouse_mapping'
 output_dir_name = r'tables'
 thread = 5
 output_format = 'tsv'
