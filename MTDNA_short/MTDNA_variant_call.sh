@@ -16,7 +16,7 @@ refGenome=$5
 
 source activate gatk4
 
-    # sample_name=`echo $fq1 | cut -d '.' -f1 | cut -d '_' -f1`
+    sample_name=`echo $fq1 | cut -d '.' -f1 | cut -d '_' -f1`
     # RG_tag="@RG\tID:$sample_name\tPL:illumina\tPU:ex\tLB:$sample_name\tSM:$sample_name"
 
     ubam_output=${sample_name}_unaligned.bam
