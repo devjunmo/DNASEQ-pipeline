@@ -4,7 +4,7 @@ import subprocess as sp
 import pandas as pd
 
 
-input_dir = r'/data/stemcell/WES/GRCh38/processing_data/re_calling/vardict_somatic_stemcell/'
+input_dir = r'/data/stemcell/WES/GRCh38/waiting3/35I_re/mutect2_stemcell/pass_vcf/'
 
 input_format = r'*_pass.vcf'
 
@@ -24,7 +24,7 @@ ref_ver = 'GRCh38' # GRCh37
 
 
 ## pbs config
-pbs_N = "stem.mut2.vad"
+pbs_N = "stem.anot3"
 pbs_o = input_dir + r"qsub_log/"
 pbs_j = "oe"
 pbs_l_core = 4
@@ -33,7 +33,7 @@ pbs_l_core = 4
 output_dir = input_dir + output_dir_name
 
 # tumor_normal_id_info = r'/data_244/utuc/utuc_NT_pair_ver_211029_utuc4_1.csv'
-tumor_normal_id_info = r'/data/stemcell/WES/GRCh38/stemcell_WES_sample_pair_220216.csv'
+tumor_normal_id_info = r'/data/stemcell/WES/GRCh38/stemcell_WES_sample_pair_220318.csv'
 
 
 pair_df = pd.read_csv(tumor_normal_id_info)
@@ -43,7 +43,7 @@ pair_df.set_index('Tumor', inplace=True)
 
 pair_dict = pair_df.to_dict('index') # {tumor : {normal:_ grade:_} dict 형태. fname
 
-print(pair_dict)
+# print(pair_dict)
 
 # exit(0)
 

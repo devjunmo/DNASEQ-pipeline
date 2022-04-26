@@ -8,14 +8,14 @@ import pandas as pd
 
 seq_type = 'WES'
 
-input_dir = r'/data/stemcell/WES/GRCh38/processing_data/re_calling/'
+input_dir = r'/data/stemcell/WES/GRCh38/waiting3/35I_re/'
 input_format = r'*_recal.bam'
 input_bam_suffix = '_sorted_deduped_recal.bam' # 19S-72988-A10-4_sorted_deduped_recal.bam / pair info 때매 쓰는 옵션
 
 # output_dir_name = r'mutect2_tumor_only/' # r'tumor_only/'
 # output_dir_name = r'mutect2_bamout_tumor_only/'
-# output_dir_name = r'mutect2_stemcell/'
-output_dir_name = r'vardict_somatic_stemcell/'
+output_dir_name = r'mutect2_stemcell/'
+# output_dir_name = r'vardict_somatic_stemcell/'
 
 # output_dir = input_dir + r'somatic_call/'
 output_dir = input_dir + output_dir_name
@@ -39,7 +39,7 @@ sec_src_path = ref_dir + r'somatic_src/small_exac_common_3.hg38.vcf.gz'
 interval_path = ref_dir + r'interval_file/S07604514_Padded.bed'
 
 
-caller_type = 'VAD' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
+caller_type = 'MT2' # MT1 (Mutect1), MT2(Mutect2), SID (somatic indel detector), VAD(vardict)
 
 # vardict 사용시 설정
 VARDICT_PATH = r'/home/jun/miniconda3/envs/vardict_java/bin/'
@@ -55,7 +55,7 @@ is_tumor_only = False # pair mode
 mutect2_tonly_inc_germline = True # tumor only 일때만 사용됨. somatic인데 germline call까지 포함할건지
 
 # pair mode 사용시 설정
-pair_info = r'/data/stemcell/WES/GRCh38/stemcell_WES_sample_pair_220216.csv'
+pair_info = r'/data/stemcell/WES/GRCh38/stemcell_WES_sample_pair_220318.csv'
 pair_info_tumor_col_name = 'Tumor'
 pair_info_normal_col_name = 'Normal'
 
@@ -74,10 +74,10 @@ if os.path.isdir(output_dir) is False:
 
 ############### pbs config ################
 
-pbs_N = "stem.wes_vad"
+pbs_N = "stem.wes_mt2"
 pbs_o = output_dir + r"pbs_out_stem_vad_somatic/"
 pbs_j = "oe"
-pbs_l_core = 4
+pbs_l_core = 3
 
 
 if os.path.isdir(pbs_o) is False:

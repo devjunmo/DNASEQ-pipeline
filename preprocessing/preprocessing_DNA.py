@@ -13,7 +13,7 @@ import os
 
 # !!!! 중요: make_recal_table.sh의 hyper parameters도 설정해줘야 함 !!!!
 
-THREADS = 4
+THREADS = 20
 REF_VER = 'hg38' # 'hg38', 'b37'
 
 
@@ -27,11 +27,12 @@ script_dir = '/data/src/DNASEQ-pipeline/preprocessing/'
 
  # 중간 생성물 지우기 여부
 rm_sam = True
-rm_raw_bam = True
-rm_sorted_bam = True
+rm_raw_bam = False
+rm_sorted_bam = False
 rm_dedup_sorted_bam = True
 
-sorting_order = 'coordinate' # or queryname
+# sorting_order = 'coordinate' # or queryname
+sorting_order = 'queryname' # or queryname
 
 max_looping = 1
 
