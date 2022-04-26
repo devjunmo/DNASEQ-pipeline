@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 sys.path.append(os.path.join(os.getcwd(), 'jun_tools'))
 import jun_mtd
 
-input_dir = r'E:/stemcell/mouse_mapping/flagstat'
+input_dir = r'E:/UTUC_data/mouse_mapping/table_data'
 input_format = r'*.tsv'
 output_dir_name = r'results'
 
@@ -67,7 +67,7 @@ class CheckMappingRate():
                               header=True, na_rep='NaN')
 
     @classmethod
-    def plotting_mapping_data(cls, _df, _group_col_name):
+    def plotting_mapping_data(cls, _df, _group_col_name, _x_rotation):
         print(_df)
         # plt.scatter(_df['sample'], _df['mapped %'], c=_df[_group_col_name], edgecolors='black',
         #             cmap='Reds_r', linewidths=1)
@@ -80,7 +80,7 @@ class CheckMappingRate():
         sns.scatterplot(x='sample', y='mapped %',
                         hue=_group_col_name, style=_group_col_name,
                         s=100, data=_df_s)
-        plt.xticks(rotation=-90)
+        plt.xticks(rotation=_x_rotation)
         plt.grid(axis='both', linestyle='--')
         plt.legend(loc=1, prop={'size': 30})
 
@@ -93,4 +93,5 @@ if __name__ == '__main__':
     check_mapping_rate_obj = CheckMappingRate(input_lst, out_csv_path)
 
     for_plotting_df = pd.read_csv(for_plotting_data_path)
-    CheckMappingRate.plotting_mapping_data(for_plotting_df, 'grp')
+    # CheckMappingRate.plotting_mapping_data(for_plotting_df, 'grp')
+    CheckMappingRate.plotting_mapping_data(for_plotting_df, None, 0)
