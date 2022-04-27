@@ -6,9 +6,9 @@ import pandas as pd
 
 
 
-root_dir = r'/data/stemcell/WES/GRCh38/bamfiles/mpileup_files/varscan_vcf/snp'
+root_dir = r'/data/stemcell/WES/GRCh38/bamfiles/mpileup_files/varscan_vcf/indel'
 
-file_format = '*.snp'
+file_format = '*.indel'
 ref_genome = r'/data/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
 
 sh_path = r'/data/src/DNASEQ-pipeline/somatic_short/Varscan/varscan_somatic_filter.sh'
