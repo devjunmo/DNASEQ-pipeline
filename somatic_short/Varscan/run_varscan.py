@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-root_dir = r'/data/stemcell/WES/GRCh38/bamfiles/mpileup_files/ips35I_varscanRE'
+root_dir = r'/data/stemcell/WES/GRCh38/bamfiles/mpileup_files/Tera12_varscan_RE'
 
 file_format = '*.mpileup'
 ref_genome = r'/data/refGenome/hg38/v0/gdc/GRCh38.d1.vd1.fa'
